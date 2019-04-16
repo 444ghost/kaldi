@@ -36,7 +36,7 @@ utils/validate_lang.pl data/lang/ # Note; this actually does report errors,
 # 444ghost ->
 numArg=$@
 if [ -z "$numArg" ]; then
-	echo "444ghost.ERROR: Specify -t=dwt|wpt (-transform=dwt|wpt)"
+	echo "444ghost.ERROR in run_wavelet.sh: Specify -t=dwt|wpt (-transform=dwt|wpt)"
 	exit 1
 fi
 
@@ -48,7 +48,7 @@ for i in "$@"; do
 		;;
 	esac
 done
-echo "The transform type is ${TRANSFORM}"
+echo "444ghost.LOG in run_wavelet.sh: The transform type is ${TRANSFORM}"
 
 waveletdir=${TRANSFORM}
 for x in test train; do
@@ -64,7 +64,7 @@ utils/subset_data_dir.sh data/train 1000 data/train_1k
 # effect may not be clear till we test triphone system.  See
 # wsj setup for examples (../../wsj/s5/run.sh)
 
-steps/train_mono.sh  --nj 1 --cmd "$train_cmd" data/train_1k data/lang exp/mono0a # 444ghost nj from 4 to 1
+steps/train_mono.sh --nj 1 --cmd "$train_cmd" data/train_1k data/lang exp/mono0a # 444ghost nj from 4 to 1
 utils/mkgraph.sh data/lang exp/mono0a exp/mono0a/graph && steps/decode.sh --nj 1 --cmd "$decode_cmd" exp/mono0a/graph data/test exp/mono0a/decode # 444ghost nj from 10 to 1
 
 steps/align_si.sh --nj 1 --cmd "$train_cmd" data/train data/lang exp/mono0a exp/mono0a_ali # 444ghost nj from 4 to 1
