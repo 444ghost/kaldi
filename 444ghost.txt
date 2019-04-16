@@ -1,0 +1,60 @@
+wavelet feature papers:
+   cubic-root log in PLP for intensity vs perceived loudness [1].
+   Wavelet features [2].
+
+   [1] Perceptual linear predictive (PLP) analysis of speech by Hynek Hermansky
+       https://pdfs.semanticscholar.org/b578/f4faeb00b808e8786d897447f2493b12b4e9.pdf
+   [2] Speech Recognition System Based on Wavelet Transform and Artificial by Engy R. Rady,
+                                                                              Ashraf H. Yahia,
+                                                                              Sayed A. El-Dahshan,
+                                                                              Hatem El-Borey
+       Neural Networkhttp://ecsjournal.org/Archive/Volume37/Issue3/7.pdf
+       
+kaldi installation:
+   sudo apt-get install git g++ make automake autoconf sox libtool subversion python2.7 zlib1g-dev 
+   ./extras/check_dependencies.sh 
+   ./extras/install_mkl.sh 
+   tools/make -j 4 
+   ./extras/install_irstlm 
+   ./configure --shared 
+   src/make clean -j 4 
+   src/make depend -j 4 
+   src/make -j 4
+
+   444ghost: change steps/diagonostics/*.py python -> python3
+
+   vi ~/.bashrc 
+   export PATH=/home/sung/kaldi/kaldi/src/bin:$PATH 
+   export PATH=/home/sung/kaldi/kaldi/src/featbin:$PATH
+   source ~/.bashrc
+
+some git controls
+   https://en.wikipedia.org/wiki/Regular_expression
+   find . -iregex '.*\.\(cc\|sh\|pl\|py\)$' | xargs du -hc
+   find . -name "*.py" | xargs cp --parents -t kaldi_git/
+   find . -name "*.py" | xargs git add
+
+   git pull // update
+   git add src
+   git commit -m "src"
+   git config --global user.email "you@example.com"
+   git config --global user.name "Your Name"
+   git push origin master
+
+   rm [-r] text.txt
+   git rm [-r] text.txt
+   git commit -m "remove"
+   git push origin master
+
+   git branch dwt
+   git branch -a
+   git push -origin dwt
+   git checkout dwt (checkout -b to create branch and switch)
+
+   git init
+   git add .
+   git commit -m "create repo"
+   git remote add origin https://github.com/444ghost/kaldi.git
+   git push -u origin master
+
+   git add -u // for modified files only
