@@ -49,6 +49,7 @@ struct MfccOptions {
                     // sqrt(2) on C0 to be the same as HTK.
 
   std::string wavelet_type; // 444ghost
+  int32 decomposition_level; // 444ghost
 
   MfccOptions() : mel_opts(23),
                   // defaults the #mel-banks to 23 for the MFCC computations.
