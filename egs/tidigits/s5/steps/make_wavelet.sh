@@ -98,7 +98,7 @@ fi
 
 if [ -f $data/segments ]; then
   # 444ghost ->
-  echo "444ghost.ERROR: Segment file exists, what?..."
+  echo "444ghost.ERROR in make_wavelet.sh: Segment file exists, what?..."
   exit 1
   # 444ghost <-
 else
@@ -116,7 +116,7 @@ else
 
   # 444ghost ->
   $cmd JOB=1:$nj $logdir/make_${trasnform_type}_${name}.JOB.log \
-    compute-mfcc-feats  $vtln_opts --verbose=2 --config=$wavelet_config \
+    compute-${trasnform_type}-feats  $vtln_opts --verbose=2 --config=$wavelet_config \
      scp,p:$logdir/wav_${name}.JOB.scp ark:- \| \
       copy-feats $write_num_frames_opt --compress=$compress ark:- \
       ark,scp:$waveletdir/raw_${trasnform_type}_$name.JOB.ark,$waveletdir/raw_${trasnform_type}_$name.JOB.scp \
