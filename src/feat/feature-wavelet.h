@@ -83,7 +83,7 @@ struct MfccOptions {
                    "(need to change other parameters).");
     // 444ghost ->
     opts->Register("wavelet-type", &wavelet_type, "Wavelet type");
-    opts->Register("decompositoin-level", &decomposition_level, "Wavelet transform decomposition level")
+    opts->Register("decompositoin-level", &decomposition_level, "Wavelet transform decomposition level");
     // 444ghost <-
   }
 };
