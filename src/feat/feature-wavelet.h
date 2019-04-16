@@ -48,6 +48,8 @@ struct MfccOptions {
   bool htk_compat;  // if true, put energy/C0 last and introduce a factor of
                     // sqrt(2) on C0 to be the same as HTK.
 
+  std::string wavelet_type; // 444ghost
+
   MfccOptions() : mel_opts(23),
                   // defaults the #mel-banks to 23 for the MFCC computations.
                   // this seems to be common for 16khz-sampled data,
@@ -78,6 +80,10 @@ struct MfccOptions {
                    "If true, put energy or C0 last and use a factor of sqrt(2) on "
                    "C0.  Warning: not sufficient to get HTK compatible features "
                    "(need to change other parameters).");
+    // 444ghost ->
+    opts->Register("wavelet-type", &wavelet_type, "Wavelet type");
+    opts->Register("decompositoin-level", &decomposition_level, "Wavelet transform decomposition level")
+    // 444ghost <-
   }
 };
 
