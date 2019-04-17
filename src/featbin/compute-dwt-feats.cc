@@ -1,4 +1,4 @@
-// featbin/compute-mfcc-feats.cc
+// featbin/compute-dwt-feats.cc
 
 // Copyright 2009-2012  Microsoft Corporation
 //                      Johns Hopkins University (author: Daniel Povey)
@@ -25,7 +25,28 @@
 #include "feat/wave-reader.h"
 
 int main(int argc, char *argv[]) {
-  
-	return -1
+ 
+	using namespace kaldi;
+	ParseOptions po("444ghost.ERROR: Wrong options");
+	WaveletOptions wavelet_opts;
+
+	int32 num_feats;
+
+	wavelet_opts.Register(&po);
+
+	//po.Register("num-feats", &num_feats, "po.Register(\"num-feats\"...");
+
+	po.Read(argc, argv);
+
+	KALDI_LOG << "num_feats = " << wavelet_opts.num_feats;
+	KALDI_LOG << "wavelet_type = " << wavelet_opts.wavelet_type;
+	KALDI_LOG << "decomposition_level = " << wavelet_opts.decomposition_level;
+
+	std::string hey = po.GetArg(1);
+	KALDI_LOG << hey;
+
+	Wavelet wavelet(wavelet_opts);
+
+	return -1;
 }
 

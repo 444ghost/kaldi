@@ -30,21 +30,20 @@ if [ $# -ge 3 ]; then
 else
   waveletdir=$data/data
 fi
-trasnform_type=$waveletdir
-if [ $transform_type == "dwt" ] || [ $transform_type == "wpt" ]; then
-	continue;
-else
-	echo "444ghost.ERROR in make_wavelet.sh: Values other than dwt and wpt are assigned to waveletdir"
+transform_type=$waveletdir
+echo $transform_type
+if [ $transform_type != "dwt" ] && [ $transform_type != "wpt" ]; then
+	echo "444ghost.ERROR in make_wavelet.sh: Other than dwt and wpt are assigned to waveletdir"
 	exit 1
 fi
 # 444ghost <-
 
 if [ $# -lt 1 ] || [ $# -gt 3 ]; then
    echo "Usage: $0 [options] <data-dir> [<log-dir> [<wavelet-dir>] ]";
-   echo "e.g.: $0 data/train exp/make_$trasnform_type/train $trasnform_type" # 444ghost
+   echo "e.g.: $0 data/train exp/make_$transform_type/train $transform_type" # 444ghost
    echo "Note: <log-dir> defaults to <data-dir>/log, and <waveletdir> defaults to <data-dir>/data"
    echo "Options: "
-   echo "  --wavelet-config <config-file>                   # config passed to compute-wavelet-feats " # 444ghost
+   echo "  --wavelet-config <config-file>                   # config passed to compute-$transform_type-feats " # 444ghost
    echo "  --nj <nj>                                        # number of parallel jobs"
    echo "  --cmd (utils/run.pl|utils/queue.pl <queue opts>) # how to run jobs."
    echo "  --write-utt2num-frames <true|false>              # If true, write utt2num_frames file."
@@ -91,7 +90,7 @@ fi
 for n in $(seq $nj); do
   # the next command does nothing unless $waveletdir/storage/ exists, see
   # utils/create_data_link.pl for more info.
-  utils/create_data_link.pl $waveletdir/raw_${trasnform_type}_$name.$n.ark # 444ghost
+  utils/create_data_link.pl $waveletdir/raw_${transform_type}_$name.$n.ark # 444ghost
 done
 
 
@@ -121,25 +120,27 @@ else
   # utterances that have bad wave data.
 
   # 444ghost ->
-  $cmd JOB=1:$nj $logdir/make_${trasnform_type}_${name}.JOB.log \
-    compute-${trasnform_type}-feats  $vtln_opts --verbose=2 --config=$wavelet_config \
+  $cmd JOB=1:$nj $logdir/make_${transform_type}_${name}.JOB.log \
+    compute-${transform_type}-feats  $vtln_opts --verbose=2 --config=$wavelet_config \
      scp,p:$logdir/wav_${name}.JOB.scp ark:- \| \
       copy-feats $write_num_frames_opt --compress=$compress ark:- \
-      ark,scp:$waveletdir/raw_${trasnform_type}_$name.JOB.ark,$waveletdir/raw_${trasnform_type}_$name.JOB.scp \
+      ark,scp:$waveletdir/raw_${transform_type}_$name.JOB.ark,$waveletdir/raw_${transform_type}_$name.JOB.scp \
       || exit 1;
   # 444ghost <-
 fi
 
+echo "444ghost.LOG in make_wavelet.sh: Done setting up wavelet feature framework"
+exit 1
 
 if [ -f $logdir/.error.$name ]; then
-  echo "Error producing ${trasnform_type} features for $name:"
-  tail $logdir/make_${trasnform_type}_${name}.1.log
+  echo "Error producing ${transform_type} features for $name:"
+  tail $logdir/make_${transform_type}_${name}.1.log
   exit 1;
 fi
 
 # concatenate the .scp files together.
 for n in $(seq $nj); do
-  cat $waveletdir/raw_${trasnform_type}_$name.$n.scp || exit 1; # 444ghost
+  cat $waveletdir/raw_${transform_type}_$name.$n.scp || exit 1; # 444ghost
 done > $data/feats.scp || exit 1
 
 if $write_utt2num_frames; then
@@ -163,4 +164,4 @@ if [ $nf -lt $[$nu - ($nu/20)] ]; then
   exit 1;
 fi
 
-echo "Succeeded creating ${trasnform_type} features for $name"
+echo "Succeeded creating ${transform_type} features for $name"

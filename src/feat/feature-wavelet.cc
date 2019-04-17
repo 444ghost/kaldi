@@ -1,4 +1,4 @@
-// feat/feature-mfcc.cc
+// feat/feature-wavelet.cc
 
 // Copyright 2009-2011  Karel Vesely;  Petr Motlicek
 //                2016  Johns Hopkins University (author: Daniel Povey)
@@ -29,12 +29,12 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 }
 
 WaveletComputer::WaveletComputer(const WaveletOptions &opts):
-    
+	opts_(opts){
+    KALDI_LOG << "num_feats in feature-wavelet.cc " << opts.num_feats;
 }
 
-WaveletComputer::WaveletComputer(const WaveletComputer &other):
-    
+WaveletComputer::~WaveletComputer() {
+ 
 }
-
 
 }  // namespace kaldi

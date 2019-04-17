@@ -1,4 +1,4 @@
-// feat/feature-mfcc.h
+// feat/feature-wavelet.h
 
 // Copyright 2009-2011  Karel Vesely;  Petr Motlicek;  Saarland University
 //           2014-2016  Johns Hopkins University (author: Daniel Povey)
@@ -24,18 +24,34 @@
 #include "feat/feature-common.h"
 #include "feat/feature-functions.h"
 #include "feat/feature-window.h"
-#include "feat/mel-computations.h"
 
 namespace kaldi {
-/// @addtogroup  feat FeatureExtraction
-/// @{
+
+struct WaveletOptions {
+  FrameExtractionOptions frame_opts;
+  int32 num_feats;
+  std::string wavelet_type;
+  int32 decomposition_level;
+
+  WaveletOptions() : num_feats(1),
+                     wavelet_type("1"),
+		     decomposition_level(1) {}
+
+  void Register(OptionsItf *opts) {
+    frame_opts.Register(opts);
+
+    opts->Register("num-feats", &num_feats, "number of features");
+    opts->Register("wavelet-type", &wavelet_type, "Wavelet type");
+    opts->Register("decomposition-level", &decomposition_level, "Wavelet transform decomposition level");
+    
+  }
+};
 
 // This is the new-style interface to the Wavelet computation.
 class WaveletComputer {
  public:
   typedef WaveletOptions Options;
-  explicit WaveletComputer(const WaveletOptions &opts);
-  WaveletComputer(const WaveletComputer &other);
+  WaveletComputer(const WaveletOptions &opts);
 
   const FrameExtractionOptions &GetFrameOptions() const {
     return opts_.frame_opts;
@@ -45,10 +61,16 @@ class WaveletComputer {
 
   void Compute(VectorBase<BaseFloat> *signal_frame,
                VectorBase<BaseFloat> *feature);
+
+  ~WaveletComputer();
+ private:
+  // disallow assignment.
+  WaveletComputer &operator = (const WaveletComputer &in);
+
+  WaveletOptions opts_;
 };
 
 typedef OfflineFeatureTpl<WaveletComputer> Wavelet;
 
-/// @} End of "addtogroup feat"
 }  // namespace kaldi
 
