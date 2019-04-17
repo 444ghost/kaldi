@@ -33,7 +33,7 @@ fi
 transform_type=$waveletdir
 echo $transform_type
 if [ $transform_type != "dwt" ] && [ $transform_type != "wpt" ]; then
-	echo "444ghost.ERROR in make_wavelet.sh: Other than dwt and wpt are assigned to waveletdir"
+	echo "444ghost.ERROR in make_wavelet.sh: Other than dwt or wpt is assigned to waveletdir"
 	exit 1
 fi
 # 444ghost <-
