@@ -1,6 +1,4 @@
-A Wavelet Feature Extraction Module for Kaldi (웨이블릿, 칼디).
-
-Trying to add a module that can extact acoustic features using wavelet transform in Kaldi. The work is in progress. All comments are welcome.
+Trying to implement a module that can extact acoustic features using wavelet transform in Kaldi. The work is in progress. All comments are welcome (검색용 텍스트: 칼디, 웨이블릿)
 
 [![Build Status](https://travis-ci.com/kaldi-asr/kaldi.svg?branch=master)](https://travis-ci.com/kaldi-asr/kaldi)
 Kaldi Speech Recognition Toolkit
