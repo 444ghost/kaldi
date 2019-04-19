@@ -26,11 +26,16 @@ namespace kaldi {
 
 void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
                               VectorBase<BaseFloat> *feature) {
+	KALDI_ASSERT(signal_frame->Dim() == opts_.frame_opts.PaddedWindowSize() &&
+               feature->Dim() == this->Dim());
 }
 
 WaveletComputer::WaveletComputer(const WaveletOptions &opts):
 	opts_(opts){
-    KALDI_LOG << "num_feats in feature-wavelet.cc " << opts.num_feats;
+
+	KALDI_LOG << "444ghost: num_feats = " << opts.num_feats;
+	KALDI_LOG << "444ghost: wavelet_type = "<< opts.wavelet_type;
+	KALDI_LOG << "444ghost: decomposition_level = " << opts.decomposition_level;
 }
 
 WaveletComputer::~WaveletComputer() {

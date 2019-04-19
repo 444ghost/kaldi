@@ -57,6 +57,36 @@ void OfflineFeatureTpl<F>::ComputeFeatures(
 }
 
 template <class F>
+void OfflineFeatureTpl<F>::ComputeFeatures( // 444ghost
+    const VectorBase<BaseFloat> &wave,
+    BaseFloat sample_freq,
+    Matrix<BaseFloat> *output) {
+  KALDI_ASSERT(output != NULL);
+  BaseFloat new_sample_freq = computer_.GetFrameOptions().samp_freq;
+  if (sample_freq == new_sample_freq) {
+    Compute(wave, output);
+  } else {
+    if (new_sample_freq < sample_freq &&
+        ! computer_.GetFrameOptions().allow_downsample)
+        KALDI_ERR << "Waveform and config sample Frequency mismatch: "
+                  << sample_freq << " .vs " << new_sample_freq
+                  << " (use --allow-downsample=true to allow "
+                  << " downsampling the waveform).";
+    else if (new_sample_freq > sample_freq &&
+             ! computer_.GetFrameOptions().allow_upsample)
+      KALDI_ERR << "Waveform and config sample Frequency mismatch: "
+                  << sample_freq << " .vs " << new_sample_freq
+                << " (use --allow-upsample=true option to allow "
+                << " upsampling the waveform).";
+    // Resample the waveform.
+    Vector<BaseFloat> resampled_wave(wave);
+    ResampleWaveform(sample_freq, wave,
+                     new_sample_freq, &resampled_wave);
+    Compute(resampled_wave, output);
+  }
+}
+
+template <class F>
 void OfflineFeatureTpl<F>::Compute(
     const VectorBase<BaseFloat> &wave,
     BaseFloat vtln_warp,
@@ -79,6 +109,29 @@ void OfflineFeatureTpl<F>::Compute(
 
     SubVector<BaseFloat> output_row(*output, r);
     computer_.Compute(raw_log_energy, vtln_warp, &window, &output_row);
+  }
+}
+
+template <class F>
+void OfflineFeatureTpl<F>::Compute( // 444ghost
+    const VectorBase<BaseFloat> &wave,
+    Matrix<BaseFloat> *output) {
+  KALDI_ASSERT(output != NULL);
+  int32 rows_out = NumFrames(wave.Dim(), computer_.GetFrameOptions()),
+      cols_out = computer_.Dim();
+  if (rows_out == 0) {
+    output->Resize(0, 0);
+    return;
+  }
+  output->Resize(rows_out, cols_out);
+  Vector<BaseFloat> window;  // windowed waveform.
+  for (int32 r = 0; r < rows_out; r++) {  // r is frame index.
+    ExtractWindow(0, wave, r, computer_.GetFrameOptions(),
+                  feature_window_function_, &window,
+                  NULL); // 444ghost
+
+    SubVector<BaseFloat> output_row(*output, r);
+    computer_.Compute(&window, &output_row);
   }
 }
 

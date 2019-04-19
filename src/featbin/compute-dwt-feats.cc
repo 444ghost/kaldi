@@ -33,10 +33,6 @@ int main(int argc, char *argv[]) {
 	wavelet_opts.Register(&po);
 	po.Read(argc, argv);
 
-	KALDI_LOG << "444ghost.LOG in compute-dwt-feats.cc: num_feats = " << wavelet_opts.num_feats;
-	KALDI_LOG << "444ghost.LOG in compute-dwt-feats.cc: wavelet_type = " << wavelet_opts.wavelet_type;
-	KALDI_LOG << "444ghost.LOG in compute-dwt-feats.cc: decomposition_level = " << wavelet_opts.decomposition_level;
-
 	// Define defaults for gobal options
 	std::string output_format = "kaldi";
 	int32 channel = -1; // -1 mono, 0 left, 1 right
@@ -96,12 +92,16 @@ int main(int argc, char *argv[]) {
 		Matrix<BaseFloat> features;
 		try {
 /********************************************************************************/
-			//mfcc.ComputeFeatures(waveform, wave_data.SampFreq(), vtln_warp_local, &features);
+			wavelet.ComputeFeatures(waveform, wave_data.SampFreq(), &features);
 /********************************************************************************/
 		} catch (...) {
 			KALDI_WARN << "Failed to compute features for utterance "
 			           << utt;
 			continue;
+		}
+
+		if (output_format == "kaldi") {
+			kaldi_writer.Write(utt, features);
 		}
 
 		if (num_utts % 10 == 0)

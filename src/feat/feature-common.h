@@ -125,6 +125,8 @@ class OfflineFeatureTpl {
   void Compute(const VectorBase<BaseFloat> &wave,
                BaseFloat vtln_warp,
                Matrix<BaseFloat> *output);
+  void Compute(const VectorBase<BaseFloat> &wave, // 444ghost
+               Matrix<BaseFloat> *output);
 
   // This const version of Compute() is a wrapper that
   // calls the non-const version on a temporary object.
@@ -132,6 +134,10 @@ class OfflineFeatureTpl {
   void Compute(const VectorBase<BaseFloat> &wave,
                BaseFloat vtln_warp,
                Matrix<BaseFloat> *output) const;
+  void Compute(const VectorBase<BaseFloat> &wave, // 444ghost
+               Matrix<BaseFloat> *output) const; 
+
+
 
   /**
      Computes the features for one file (one sequence of features).
@@ -152,6 +158,10 @@ class OfflineFeatureTpl {
                        BaseFloat sample_freq,
                        BaseFloat vtln_warp,
                        Matrix<BaseFloat> *output);
+
+  void ComputeFeatures(const VectorBase<BaseFloat> &wave,
+                       BaseFloat sample_freq,
+                       Matrix<BaseFloat> *output); // 444ghost
 
   int32 Dim() const { return computer_.Dim(); }
 
