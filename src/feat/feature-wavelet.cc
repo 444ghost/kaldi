@@ -26,8 +26,42 @@ namespace kaldi {
 
 void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
                               VectorBase<BaseFloat> *feature) {
-	KALDI_ASSERT(signal_frame->Dim() == opts_.frame_opts.PaddedWindowSize() &&
-               feature->Dim() == this->Dim());
+	KALDI_ASSERT(
+			signal_frame->Dim() ==
+		 	opts_.frame_opts.PaddedWindowSize() &&
+	                feature->Dim() == this->Dim()
+		    );
+
+	int length = signal_frame->Dim();
+	int iteration = opts_.decomposition_level;
+	
+	//VectorBase<BaseFloat> dwt_vector;
+	//dwt_vector.Resize(opts_.num_feats);
+
+	// opts_.num_feats;
+	// opts_.wavelet_type;
+	// opts_.decomposition_level;
+
+	if(length % 2 == 0){
+	
+		KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: even";
+	} else{
+
+		KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: odd";
+	}
+	/*
+	if(opts_.wavelet_type == "haar"){
+
+		for(int i = 0; i < length; i++){
+
+		
+		}
+	}
+	*/
+	
+
+	
+	
 }
 
 WaveletComputer::WaveletComputer(const WaveletOptions &opts):
