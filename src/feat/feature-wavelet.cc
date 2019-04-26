@@ -89,7 +89,7 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 
 			output.insert(output.end(), max);
 			output.insert(output.end(), min);
-			output.insert(output.end(), sqrt(norm)); // L2 norm, square.
+			output.insert(output.end(), sqrt(norm)); // L2 norm
 
 			length = length / 2;
 
@@ -106,7 +106,7 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 
 				output.insert(output.end(), max);
 				output.insert(output.end(), min);
-				output.insert(output.end(), sqrt(norm));
+				output.insert(output.end(), sqrt(norm)); // L2 norm
 			}
 
 			//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: output.size() = " << output.size();
