@@ -31,7 +31,7 @@ else
   waveletdir=$data/data
 fi
 transform_type=$waveletdir
-echo $transform_type
+
 if [ $transform_type != "dwt" ] && [ $transform_type != "wpt" ]; then
 	echo "444ghost.ERROR in make_wavelet.sh: Other than dwt or wpt is assigned to waveletdir"
 	exit 1
@@ -130,7 +130,6 @@ else
 fi
 
 echo "444ghost.LOG in make_wavelet.sh: Done setting up wavelet feature framework"
-exit 1
 
 if [ -f $logdir/.error.$name ]; then
   echo "Error producing ${transform_type} features for $name:"
