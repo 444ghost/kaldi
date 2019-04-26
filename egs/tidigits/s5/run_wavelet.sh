@@ -52,7 +52,7 @@ echo "444ghost.LOG in run_wavelet.sh: The transform type is ${TRANSFORM}"
 
 waveletdir=${TRANSFORM}
 for x in test train; do
-	steps/make_wavelet.sh --cmd "$train_cmd" --nj 1 data/$x exp/make_$waveletdir/$x $waveletdir || exit 1; # 444ghost nj from 20 to 1
+	steps/make_wavelet.sh --cmd "$train_cmd" --nj 20 data/$x exp/make_$waveletdir/$x $waveletdir || exit 1; # 444ghost nj from 20 to 1
 	utils/fix_data_dir.sh data/$x
 	steps/compute_cmvn_stats.sh data/$x exp/make_$waveletdir/$x $waveletdir || exit 1;
 done
@@ -64,13 +64,13 @@ utils/subset_data_dir.sh data/train 1000 data/train_1k
 # effect may not be clear till we test triphone system.  See
 # wsj setup for examples (../../wsj/s5/run.sh)
 
-steps/train_mono.sh --nj 1 --cmd "$train_cmd" data/train_1k data/lang exp/mono0a # 444ghost nj from 4 to 1
-utils/mkgraph.sh data/lang exp/mono0a exp/mono0a/graph && steps/decode.sh --nj 1 --cmd "$decode_cmd" exp/mono0a/graph data/test exp/mono0a/decode # 444ghost nj from 10 to 1
+steps/train_mono.sh --nj 4 --cmd "$train_cmd" data/train_1k data/lang exp/mono0a # 444ghost nj from 4 to 1
+utils/mkgraph.sh data/lang exp/mono0a exp/mono0a/graph && steps/decode.sh --nj 10 --cmd "$decode_cmd" exp/mono0a/graph data/test exp/mono0a/decode # 444ghost nj from 10 to 1
 
-steps/align_si.sh --nj 1 --cmd "$train_cmd" data/train data/lang exp/mono0a exp/mono0a_ali # 444ghost nj from 4 to 1
+steps/align_si.sh --nj 4 --cmd "$train_cmd" data/train data/lang exp/mono0a exp/mono0a_ali # 444ghost nj from 4 to 1
 steps/train_deltas.sh --cmd "$train_cmd" 300 3000 data/train data/lang exp/mono0a_ali exp/tri1
 utils/mkgraph.sh data/lang exp/tri1 exp/tri1/graph
-steps/decode.sh --nj 1 --cmd "$decode_cmd" exp/tri1/graph data/test exp/tri1/decode # 444ghost nj from 10 to 1
+steps/decode.sh --nj 10 --cmd "$decode_cmd" exp/tri1/graph data/test exp/tri1/decode # 444ghost nj from 10 to 1
 
 # Example of looking at the output.
 # utils/int2sym.pl -f 2- data/lang/words.txt  exp/tri1/decode/scoring/19.tra | sed "s/ $//" | sort | diff - data/test/text
