@@ -1,0 +1,19 @@
+for x in exp/*/decode*; do [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh; done
+
+no L2 norm and 1 for all nj’s
+%WER 38.53 [ 11010 / 28576, 1308 ins, 2759 del, 6943 sub ] exp/mono0a/decode/wer_19
+%WER 29.86 [ 8533 / 28576, 987 ins, 2248 del, 5298 sub ] exp/tri1/decode/wer_19
+
+no L2 norm and default values for all nj’s
+%WER 39.03 [ 11152 / 28576, 1345 ins, 2429 del, 7378 sub ] exp/mono0a/decode/wer_19
+%WER 29.71 [ 8489 / 28576, 1021 ins, 1896 del, 5572 sub ] exp/tri1/decode/wer_19
+
+L2 norm and default values for all nj’s
+%WER 17.93 [ 5123 / 28576, 778 ins, 465 del, 3880 sub ] exp/mono0a/decode/wer_19
+%WER 12.31 [ 3517 / 28576, 586 ins, 246 del, 2685 sub ] exp/tri1/decode/wer_19
+
+L2 norm and default values for all nj’s and avg, diff / sqrt(2)
+%WER 18.03 [ 5151 / 28576, 847 ins, 457 del, 3847 sub ] exp/mono0a/decode/wer_19
+%WER 12.46 [ 3560 / 28576, 614 ins, 239 del, 2707 sub ] exp/tri1/decode/wer_19
+
+
