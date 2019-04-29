@@ -41,64 +41,49 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 	// opts_.wavelet_type;
 	// opts_.decomposition_level;
 
-	if(opts_.wavelet_type == "haar"){
+	if(opts_.transform_type == "dwt"){
 
-		std::vector<BaseFloat> output, avg, diff;
+		if(opts_.wavelet_type == "haar"){
 
-		while(iteration > 0){
+			std::vector<BaseFloat> output, avg, diff;
 
-			//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: iteration = " << iteration;
+			while(iteration > 0){
 
-			BaseFloat max = 0;
-			BaseFloat min = 0;
-			BaseFloat norm = 0;
+				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: iteration = " << iteration;
 
-			if(iteration == opts_.decomposition_level){
+				BaseFloat max = 0;
+				BaseFloat min = 0;
+				BaseFloat norm = 0;
 
-				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: first-band length = " << length;
-				for(int i = 0; i < length / 2; i++){
+				if(iteration == opts_.decomposition_level){
 
-					avg.push_back(((*signal_frame)(2 * i) + (*signal_frame)((2 * i) + 1)) / 2); 
-					diff.push_back(((*signal_frame)(2 * i) - (*signal_frame)((2 * i) + 1)) / 2);
-					norm += pow((*signal_frame)(2 * i), 2) + pow((*signal_frame)((2 * i) + 1), 2);
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: first-band length = " << length;
+					for(int i = 0; i < length / 2; i++){
+
+						avg.push_back(((*signal_frame)(2 * i) + (*signal_frame)((2 * i) + 1)) / 2); 
+						diff.push_back(((*signal_frame)(2 * i) - (*signal_frame)((2 * i) + 1)) / 2);
+						norm += pow((*signal_frame)(2 * i), 2) + pow((*signal_frame)((2 * i) + 1), 2);
+					}
+				} else{
+
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: subband length = " << length;
+
+					std::vector<BaseFloat> subband;
+					subband = avg;
+
+					avg.clear();
+					diff.clear();
+
+					for(int i = 0; i < length / 2; i++){
+
+						avg.push_back(((subband.at(2 * i) + subband.at((2 * i) + 1)) / 2)); 
+						diff.push_back(((subband.at(2 * i) - subband.at((2 * i) + 1)) / 2));
+						norm += pow(subband.at(2 * i), 2) + pow(subband.at((2 * i) + 1), 2); 	
+					}
 				}
-			} else{
 
-				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: subband length = " << length;
-
-				std::vector<BaseFloat> subband;
-				subband = avg;
-
-				avg.clear();
-				diff.clear();
-
-				for(int i = 0; i < length / 2; i++){
-
-					avg.push_back(((subband.at(2 * i) + subband.at((2 * i) + 1)) / 2)); 
-					diff.push_back(((subband.at(2 * i) - subband.at((2 * i) + 1)) / 2));
-					norm += pow(subband.at(2 * i), 2) + pow(subband.at((2 * i) + 1), 2); 	
-				}
-			}
-
-			max = *std::max_element(diff.begin(), diff.end());
-			min = *std::min_element(diff.begin(), diff.end());
-			
-			//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: max = " << max;
-			//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: min = " << min;
-			//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: norm = " << norm;
-
-			output.insert(output.end(), max);
-			output.insert(output.end(), min);
-			output.insert(output.end(), sqrt(norm)); // L2 norm
-
-			length = length / 2;
-
-			iteration--;
-
-			if(iteration == 0){
-
-				max = *std::max_element(avg.begin(), avg.end());
-				min = *std::min_element(avg.begin(), avg.end());
+				max = *std::max_element(diff.begin(), diff.end());
+				min = *std::min_element(diff.begin(), diff.end());
 				
 				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: max = " << max;
 				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: min = " << min;
@@ -107,28 +92,126 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 				output.insert(output.end(), max);
 				output.insert(output.end(), min);
 				output.insert(output.end(), sqrt(norm)); // L2 norm
+
+				length = length / 2;
+
+				iteration--;
+
+				if(iteration == 0){
+
+					max = *std::max_element(avg.begin(), avg.end());
+					min = *std::min_element(avg.begin(), avg.end());
+					
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: max = " << max;
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: min = " << min;
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: norm = " << norm;
+
+					output.insert(output.end(), max);
+					output.insert(output.end(), min);
+					output.insert(output.end(), sqrt(norm)); // L2 norm
+				}
+
+				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: output.size() = " << output.size();
 			}
 
-			//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: output.size() = " << output.size();
+			for(int i = 0; i < opts_.num_feats; i++){
+
+				(*feature)(i) = output.at(i);
+				KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << output.at(i);
+			}
 		}
+	} else if(opts_.transform_type == "wpt"){
 
-		for(int i = 0; i < opts_.num_feats; i++){
+		if(opts_.wavelet_type == "haar"){
 
-			(*feature)(i) = output.at(i);
-			KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << output.at(i);
+			std::vector<BaseFloat> output, avg, diff;
+
+			while(iteration > 0){
+
+				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: iteration = " << iteration;
+
+				BaseFloat max = 0;
+				BaseFloat min = 0;
+				BaseFloat norm = 0;
+
+				if(iteration == opts_.decomposition_level){
+
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: first-band length = " << length;
+					for(int i = 0; i < length / 2; i++){
+
+						avg.push_back(((*signal_frame)(2 * i) + (*signal_frame)((2 * i) + 1)) / 2); 
+						diff.push_back(((*signal_frame)(2 * i) - (*signal_frame)((2 * i) + 1)) / 2);
+						norm += pow((*signal_frame)(2 * i), 2) + pow((*signal_frame)((2 * i) + 1), 2);
+					}
+				} else{
+
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: subband length = " << length;
+
+					std::vector<BaseFloat> subband;
+					subband = avg;
+
+					avg.clear();
+					diff.clear();
+
+					for(int i = 0; i < length / 2; i++){
+
+						avg.push_back(((subband.at(2 * i) + subband.at((2 * i) + 1)) / 2)); 
+						diff.push_back(((subband.at(2 * i) - subband.at((2 * i) + 1)) / 2));
+						norm += pow(subband.at(2 * i), 2) + pow(subband.at((2 * i) + 1), 2); 	
+					}
+				}
+
+				max = *std::max_element(diff.begin(), diff.end());
+				min = *std::min_element(diff.begin(), diff.end());
+				
+				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: max = " << max;
+				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: min = " << min;
+				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: norm = " << norm;
+
+				output.insert(output.end(), max);
+				output.insert(output.end(), min);
+				output.insert(output.end(), sqrt(norm)); // L2 norm
+
+				length = length / 2;
+
+				iteration--;
+
+				if(iteration == 0){
+
+					max = *std::max_element(avg.begin(), avg.end());
+					min = *std::min_element(avg.begin(), avg.end());
+					
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: max = " << max;
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: min = " << min;
+					//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: norm = " << norm;
+
+					output.insert(output.end(), max);
+					output.insert(output.end(), min);
+					output.insert(output.end(), sqrt(norm)); // L2 norm
+				}
+
+				//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: output.size() = " << output.size();
+			}
+
+			for(int i = 0; i < opts_.num_feats; i++){
+
+				(*feature)(i) = output.at(i);
+				KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << output.at(i);
+			}
 		}
 	}
-	//KALDI_LOG << "---------------------------------";
 }
 
 WaveletComputer::WaveletComputer(const WaveletOptions &opts):
 	opts_(opts){
 
-	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: dither = " << opts.frame_opts.dither;
-	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: round_to_power_of_two = " << opts.frame_opts.round_to_power_of_two;
-	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: num_feats = " << opts.num_feats;
-	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: wavelet_type = "<< opts.wavelet_type;
-	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: decomposition_level = " << opts.decomposition_level;
+	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc--------------->";
+	KALDI_LOG << "round_to_power_of_two = " << opts.frame_opts.round_to_power_of_two;
+	KALDI_LOG << "num_feats = " << opts.num_feats;
+	KALDI_LOG << "wavelet_type = "<< opts.wavelet_type;
+	KALDI_LOG << "decomposition_level = " << opts.decomposition_level;
+	KALDI_LOG << "transform_type = " << opts.transform_type;
+	KALDI_LOG << "<---------------444ghost.LOG in feature-wavelet.cc";
 }
 
 WaveletComputer::~WaveletComputer() {

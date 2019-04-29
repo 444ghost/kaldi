@@ -10040,7 +10040,7 @@ compute-cmvn-stats.o: compute-cmvn-stats.cc /usr/include/stdc-predef.h \
  ../matrix/sp-matrix-inl.h ../matrix/tp-matrix.h \
  ../matrix/matrix-functions.h ../matrix/matrix-functions-inl.h \
  ../matrix/srfft.h ../matrix/optimization.h ../transform/cmvn.h
-compute-dwt-feats.o: compute-dwt-feats.cc /usr/include/stdc-predef.h \
+compute-wavelet-feats.o: compute-wavelet-feats.cc /usr/include/stdc-predef.h \
  ../base/kaldi-common.h /usr/include/c++/7/cstddef \
  /usr/include/x86_64-linux-gnu/c++/7/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/7/bits/os_defines.h \

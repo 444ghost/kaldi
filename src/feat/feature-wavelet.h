@@ -33,10 +33,12 @@ struct WaveletOptions {
   int32 num_feats;
   std::string wavelet_type;
   int32 decomposition_level;
+  std::string transform_type;
 
   WaveletOptions() : num_feats(1),
                      wavelet_type("1"),
-		     decomposition_level(1) {}
+		     decomposition_level(1), 
+		     transform_type("dwt") {}
 
   void Register(OptionsItf *opts) {
     frame_opts.Register(opts);
@@ -44,7 +46,7 @@ struct WaveletOptions {
     opts->Register("num-feats", &num_feats, "number of features");
     opts->Register("wavelet-type", &wavelet_type, "Wavelet type");
     opts->Register("decomposition-level", &decomposition_level, "Wavelet transform decomposition level");
-    
+    opts->Register("transform-type", &transform_type, "Wavelet transform type");
   }
 };
 

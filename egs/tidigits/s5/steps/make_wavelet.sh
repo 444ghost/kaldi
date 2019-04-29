@@ -43,7 +43,7 @@ if [ $# -lt 1 ] || [ $# -gt 3 ]; then
    echo "e.g.: $0 data/train exp/make_$transform_type/train $transform_type" # 444ghost
    echo "Note: <log-dir> defaults to <data-dir>/log, and <waveletdir> defaults to <data-dir>/data"
    echo "Options: "
-   echo "  --wavelet-config <config-file>                   # config passed to compute-$transform_type-feats " # 444ghost
+   echo "  --wavelet-config <config-file>                   # config passed to compute-wavelet-feats " # 444ghost
    echo "  --nj <nj>                                        # number of parallel jobs"
    echo "  --cmd (utils/run.pl|utils/queue.pl <queue opts>) # how to run jobs."
    echo "  --write-utt2num-frames <true|false>              # If true, write utt2num_frames file."
@@ -118,10 +118,10 @@ else
 
   # add ,p to the input rspecifier so that we can just skip over
   # utterances that have bad wave data.
-
+  # --transform-type=$transform_type
   # 444ghost ->
   $cmd JOB=1:$nj $logdir/make_${transform_type}_${name}.JOB.log \
-    compute-${transform_type}-feats  $vtln_opts --verbose=2 --config=$wavelet_config \
+    compute-wavelet-feats $vtln_opts --verbose=2 --config=$wavelet_config \
      scp,p:$logdir/wav_${name}.JOB.scp ark:- \| \
       copy-feats $write_num_frames_opt --compress=$compress ark:- \
       ark,scp:$waveletdir/raw_${transform_type}_$name.JOB.ark,$waveletdir/raw_${transform_type}_$name.JOB.scp \

@@ -36,7 +36,7 @@ utils/validate_lang.pl data/lang/ # Note; this actually does report errors,
 # 444ghost ->
 numArg=$@
 if [ -z "$numArg" ]; then
-	echo "444ghost.ERROR in run_wavelet.sh: Specify -t=dwt|wpt (-transform=dwt|wpt)"
+	echo "444ghost.ERROR in run_wavelet.sh: Specify transform type directory -t=dwt|wpt (-transform=dwt|wpt)"
 	exit 1
 fi
 
@@ -49,7 +49,6 @@ for i in "$@"; do
 	esac
 done
 echo "444ghost.LOG in run_wavelet.sh: The transform type is ${TRANSFORM}"
-
 waveletdir=${TRANSFORM}
 for x in test train; do
 	steps/make_wavelet.sh --cmd "$train_cmd" --nj 20 data/$x exp/make_$waveletdir/$x $waveletdir || exit 1; # 444ghost nj from 20 to 1

@@ -33,4 +33,6 @@ default values for all nj’s, haar, 21 feats, j = 6, max, min, L2 norm, no dith
 %WER 8.20 [ 2343 / 28576, 500 ins, 218 del, 1625 sub ] exp/tri1/decode/wer_19
 
 default values for all nj’s, haar, 39 feats, j = 12, max, min, L2 norm, no dithering, no power of two when windowing
+%WER 21.00 [ 6002 / 28576, 1181 ins, 632 del, 4189 sub ] exp/mono0a/decode/wer_19
+%WER 14.84 [ 4242 / 28576, 910 ins, 413 del, 2919 sub ] exp/tri1/decode/wer_19
 
