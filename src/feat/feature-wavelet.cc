@@ -124,6 +124,8 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 WaveletComputer::WaveletComputer(const WaveletOptions &opts):
 	opts_(opts){
 
+	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: dither = " << opts.frame_opts.dither;
+	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: round_to_power_of_two = " << opts.frame_opts.round_to_power_of_two;
 	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: num_feats = " << opts.num_feats;
 	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: wavelet_type = "<< opts.wavelet_type;
 	KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: decomposition_level = " << opts.decomposition_level;

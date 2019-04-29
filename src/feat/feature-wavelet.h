@@ -29,6 +29,7 @@ namespace kaldi {
 
 struct WaveletOptions {
   FrameExtractionOptions frame_opts;
+
   int32 num_feats;
   std::string wavelet_type;
   int32 decomposition_level;
