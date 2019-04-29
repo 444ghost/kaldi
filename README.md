@@ -1,6 +1,6 @@
 Trying to implement a module that can extact acoustic features using wavelet transform in Kaldi (검색용 텍스트: 칼디, 웨이블릿).
 
-The conf/wavelet.conf file allows you to change "num-feats" and "decomposition-level" options. The default setup uses discrete wavelet transform(dwt) and calculates each subband's max, min, and L2 norm. Therefore for every "decomposition-level", say J, (J + 1) * 3 features("num-feats") are required, 2^(J) * 3 features for wavelet packet transform(wpt). Still under experiment to find the best features.
+The conf/wavelet.conf file allows you to change "num-feats" and "decomposition-level" options. The default setup uses discrete wavelet transform(dwt) and calculates each subband's max, min, and L2 norm. Therefore for every "decomposition-level", say J, (J + 1) * 3 features("num-feats") are required, 2^(J) * 3 features for wavelet packet transform(wpt).
 
 [![Build Status](https://travis-ci.com/kaldi-asr/kaldi.svg?branch=master)](https://travis-ci.com/kaldi-asr/kaldi)
 Kaldi Speech Recognition Toolkit
