@@ -1,5 +1,13 @@
 for x in exp/*/decode*; do [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh; done
 
+baseline 13/23
+%WER 0.90 [ 258 / 28576, 102 ins, 101 del, 55 sub ] exp/mono0a/decode/wer_16
+%WER 0.64 [ 183 / 28576, 138 ins, 27 del, 18 sub ] exp/tri1/decode/wer_19
+
+baseline 50/50
+%WER 3.24 [ 926 / 28576, 329 ins, 231 del, 366 sub ] exp/mono0a/decode/wer_19
+%WER 2.48 [ 708 / 28576, 521 ins, 56 del, 131 sub ] exp/tri1/decode/wer_19
+
 1 for all nj’s, haar, 12 feats, j = 3, max, min, no square L2 norm
 %WER 38.53 [ 11010 / 28576, 1308 ins, 2759 del, 6943 sub ] exp/mono0a/decode/wer_19
 %WER 29.86 [ 8533 / 28576, 987 ins, 2248 del, 5298 sub ] exp/tri1/decode/wer_19
@@ -8,12 +16,21 @@ default values for all nj’s, haar, 12 feats, j = 3, max, min, no square L2 nor
 %WER 39.03 [ 11152 / 28576, 1345 ins, 2429 del, 7378 sub ] exp/mono0a/decode/wer_19
 %WER 29.71 [ 8489 / 28576, 1021 ins, 1896 del, 5572 sub ] exp/tri1/decode/wer_19
 
-default values for all nj’s, haar, 12 feats, j = 3, max, min, L2 norm
-%WER 17.93 [ 5123 / 28576, 778 ins, 465 del, 3880 sub ] exp/mono0a/decode/wer_19
-%WER 12.31 [ 3517 / 28576, 586 ins, 246 del, 2685 sub ] exp/tri1/decode/wer_19
-
 default values for all nj’s, haar, 12 feats, j = 3, max, min, L2 norm divided by sqrt(2) instead of 2
 %WER 18.03 [ 5151 / 28576, 847 ins, 457 del, 3847 sub ] exp/mono0a/decode/wer_19
 %WER 12.46 [ 3560 / 28576, 614 ins, 239 del, 2707 sub ] exp/tri1/decode/wer_19
 
+default values for all nj’s, haar, 12 feats, j = 3, max, min, L2 norm
+%WER 17.93 [ 5123 / 28576, 778 ins, 465 del, 3880 sub ] exp/mono0a/decode/wer_19
+%WER 12.31 [ 3517 / 28576, 586 ins, 246 del, 2685 sub ] exp/tri1/decode/wer_19
+
+default values for all nj’s, haar, 12 feats, j = 3, max, min, L2 norm, no dithering, no power of two when windowing
+%WER 17.43 [ 4982 / 28576, 703 ins, 463 del, 3816 sub ] exp/mono0a/decode/wer_19
+%WER 12.53 [ 3580 / 28576, 610 ins, 248 del, 2722 sub ] exp/tri1/decode/wer_19
+
+default values for all nj’s, haar, 21 feats, j = 6, max, min, L2 norm, no dithering, no power of two when windowing
+%WER 12.52 [ 3577 / 28576, 709 ins, 393 del, 2475 sub ] exp/mono0a/decode/wer_19
+%WER 8.20 [ 2343 / 28576, 500 ins, 218 del, 1625 sub ] exp/tri1/decode/wer_19
+
+default values for all nj’s, haar, 39 feats, j = 12, max, min, L2 norm, no dithering, no power of two when windowing
 
