@@ -1,7 +1,7 @@
 Trying to implement a module that can extact acoustic features using wavelet transform in Kaldi (검색용 텍스트: 칼디, 웨이블릿).
 
 The conf/wavelet.conf file allows you to change "num-feats" and "decomposition-level" options. The default setup uses each subband's max, min, and L2 norm. Therefore for every "decomposition-level", say J:
- - (J + 1) * 3 features (discrete wavelet transform) 
+ - (J+1) * 3 features (discrete wavelet transform) 
  - 2^(J) * 3 features (wavelet packet transform)
  
  are required.
