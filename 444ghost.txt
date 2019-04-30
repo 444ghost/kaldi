@@ -1,7 +1,8 @@
-wavelet feature papers:
-   cubic-root log in PLP for intensity vs perceived loudness [1].
+Papers and other useful stuff:
+   Cubic-root log in PLP for intensity vs perceived loudness [1].
    Wavelet features [2].
    Kaldi tutorials [3].
+   VM symbolic link on Windows [4].
 
    [1] Perceptual linear predictive (PLP) analysis of speech by Hynek Hermansky
        https://pdfs.semanticscholar.org/b578/f4faeb00b808e8786d897447f2493b12b4e9.pdf
@@ -11,6 +12,7 @@ wavelet feature papers:
                                                                               Hatem El-Borey
        Neural Networkhttp://ecsjournal.org/Archive/Volume37/Issue3/7.pdf
    [3] https://www.eleanorchodroff.com/ by Eleanor Chodroff
+   [4] https://www.nextofwindows.com/virtualbox-unable-to-merge-not-enough-free-storage-space
        
 kaldi installation:
    sudo apt-get install git g++ make automake autoconf sox libtool subversion python2.7 zlib1g-dev 
