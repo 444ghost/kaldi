@@ -1,20 +1,3 @@
-Papers and other useful stuff:
-   Cubic-root log in PLP for intensity vs perceived loudness [1].
-   Wavelet features [2].
-   Kaldi tutorials [3], [4].
-   VM symbolic link on Windows [5].
-
-   [1] Perceptual linear predictive (PLP) analysis of speech by Hynek Hermansky
-       https://pdfs.semanticscholar.org/b578/f4faeb00b808e8786d897447f2493b12b4e9.pdf
-   [2] Speech Recognition System Based on Wavelet Transform and Artificial by Engy R. Rady,
-                                                                              Ashraf H. Yahia,
-                                                                              Sayed A. El-Dahshan,
-                                                                              Hatem El-Borey
-       Neural Networkhttp://ecsjournal.org/Archive/Volume37/Issue3/7.pdf
-   [3] https://www.eleanorchodroff.com/ by Eleanor Chodroff
-   [4] http://www.inf.ed.ac.uk/teaching/courses/asr/2018-19/lab1.pdf at University of Edinburgh
-   [5] https://www.nextofwindows.com/virtualbox-unable-to-merge-not-enough-free-storage-space
-       
 kaldi installation:
    sudo apt-get install git g++ make automake autoconf sox libtool subversion python2.7 zlib1g-dev 
    ./extras/check_dependencies.sh 
