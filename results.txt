@@ -32,7 +32,12 @@ default values for all nj’s, haar, 21 feats, j = 6, max, min, L2 norm, no dith
 %WER 12.52 [ 3577 / 28576, 709 ins, 393 del, 2475 sub ] exp/mono0a/decode/wer_19
 %WER 8.20 [ 2343 / 28576, 500 ins, 218 del, 1625 sub ] exp/tri1/decode/wer_19
 
+default values for all nj’s, haar, 27 feats, j = 8, max, min, L2 norm, no dithering, no power of two when windowing
+%WER 12.61 [ 3604 / 28576, 829 ins, 385 del, 2390 sub ] exp/mono0a/decode/wer_19
+%WER 8.20 [ 2344 / 28576, 637 ins, 230 del, 1477 sub ] exp/tri1/decode/wer_19
+
 default values for all nj’s, haar, 39 feats, j = 12, max, min, L2 norm, no dithering, no power of two when windowing
 %WER 21.00 [ 6002 / 28576, 1181 ins, 632 del, 4189 sub ] exp/mono0a/decode/wer_19
 %WER 14.84 [ 4242 / 28576, 910 ins, 413 del, 2919 sub ] exp/tri1/decode/wer_19
+// For 25ms/10ms shift window, the sample size is 500 so J = 8 is maximum, 2^8 = 256.
 
