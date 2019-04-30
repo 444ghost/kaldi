@@ -89,9 +89,7 @@ int main(int argc, char *argv[]) {
 		SubVector<BaseFloat> waveform(wave_data.Data(), this_chan);
 		Matrix<BaseFloat> features;
 		try {
-/********************************************************************************/
 			wavelet.ComputeFeatures(waveform, wave_data.SampFreq(), &features);
-/********************************************************************************/
 		} catch (...) {
 			KALDI_WARN << "Failed to compute features for utterance "
 			           << utt;
