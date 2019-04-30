@@ -24,6 +24,8 @@ Scripts
 
 ./run_wavelet.sh -t=wpt
 
+-t options should match transform-type in conf/wavelet.conf
+
 Papers and tutorials
 --------------------
 Cubic-root log in PLP for intensity vs perceived loudness [3].

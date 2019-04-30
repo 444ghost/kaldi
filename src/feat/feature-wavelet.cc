@@ -29,7 +29,7 @@ void DWT(VectorBase<BaseFloat> *signal, int length, int J, std::vector<BaseFloat
 
 	if(signal->Dim() < pow(2, J)){
 
-		KALDI_ERR << "444ghost.ERROR in feature-wavelet.cc: too many decomposition steps for current window size(sample size)";
+		KALDI_ERR << "444ghost.ERROR in feature-wavelet.cc: too many decomposition levels for current window size(sample size)";
 		return;
 	}
 
