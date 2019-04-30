@@ -27,8 +27,11 @@ Scripts
 Papers and tutorials
 --------------------
 Cubic-root log in PLP for intensity vs perceived loudness [3].
+
 Wavelet features [4].
+
 Kaldi tutorials [5], [6].
+
 VM symbolic link on Windows [7].
 
  
