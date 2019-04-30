@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2012-2016  Johns Hopkins University (Author: Daniel Povey)
+#		 2019  Euisung Kim
+
 # ./run_wavelet.sh -t=dwt|wpt
 # ./run_wavelet.sh -transform=dwt|wpt
 # make sure when pass the wavelet directory parameters, it matches the transform type in conf/wavelet.conf

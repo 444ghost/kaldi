@@ -1,8 +1,6 @@
 // featbin/compute-wavelet-feats.cc
 
-// Copyright 2009-2012  Microsoft Corporation
-//                      Johns Hopkins University (author: Daniel Povey)
-//			444ghost
+// Copyright 2019- Euisung Kim
 
 // See ../../COPYING for clarification regarding multiple authors
 //

@@ -1,7 +1,6 @@
 // feat/feature-wavelet.h
 
-// Copyright 2009-2011  Karel Vesely;  Petr Motlicek;  Saarland University
-//           2014-2016  Johns Hopkins University (author: Daniel Povey)
+// Copyright 2019- Euisung Kim
 
 // See ../../COPYING for clarification regarding multiple authors
 //
