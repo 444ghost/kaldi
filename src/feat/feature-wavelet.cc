@@ -79,6 +79,58 @@ void DWT(VectorBase<BaseFloat> *signal, int length, int J, std::vector<BaseFloat
 	*/
 }
 
+void WPT(VectorBase<BaseFloat> *signal, int length, int J, int J2, std::vector<BaseFloat> *output, std::string wavelet_type){
+
+	KALDI_LOG << "signal->Dim() = " << signal->Dim();
+	KALDI_LOG << "J = " << J;
+	KALDI_LOG << "J2 = " << J2;
+
+	if(wavelet_type == "haar"){
+
+		if(J == 0 || J2 == 0){
+
+			output->insert(output->end(), signal->Max());
+			output->insert(output->end(), signal->Min());
+			output->insert(output->end(), signal->Norm(2));
+			KALDI_LOG << "exit here?" << J;
+			return;
+		}
+
+		Vector<BaseFloat> vAvg(length/2), vDiff(length/2);
+
+		for(int i = 0; i < length/2; i++){
+
+			vAvg(i) = ((*signal)(2*i) + (*signal)((2*i)+1)) / 2;
+			vDiff(i) = ((*signal)(2*i) - (*signal)((2*i)+1)) / 2;
+		}
+
+		output->insert(output->end(), vAvg.Max());
+		output->insert(output->end(), vAvg.Min());
+		output->insert(output->end(), vAvg.Norm(2));
+		output->insert(output->end(), vDiff.Max());
+		output->insert(output->end(), vDiff.Min());
+		output->insert(output->end(), vDiff.Norm(2));
+
+		for(int i = 0; i < length/2; i++){
+
+			KALDI_LOG << "vAvg(" << i << ") = " << vAvg(i);
+		}
+
+		for(int i = 0; i < length/2; i++){
+
+			KALDI_LOG << "vDiff(" << i << ") = " << vDiff(i);
+		}
+
+		KALDI_LOG << "**************************************";
+
+		WPT(&vAvg, length/2, --J, J2, output, wavelet_type);
+		WPT(&vDiff, length/2, J, --J2, output, wavelet_type);
+	
+	}
+
+	return;
+}
+
 void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
                               VectorBase<BaseFloat> *feature) {
 	KALDI_ASSERT(
@@ -87,9 +139,10 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 	                feature->Dim() == this->Dim()
 		    );
 
+	std::string transform_type = opts_.transform_type;
 	std::string wavelet_type = opts_.wavelet_type;
 
-	if(opts_.transform_type == "dwt"){
+	if(transform_type == "dwt"){
 
 		int length = signal_frame->Dim();
 		int J = opts_.decomposition_level;
@@ -103,6 +156,21 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 			(*feature)(i) = output.at(i);
 			KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << (*feature)(i);
 		}
+	} else if(transform_type == "wpt"){
+
+		int length = signal_frame->Dim();
+		int J = opts_.decomposition_level;
+		std::vector<BaseFloat> output;
+		Vector<BaseFloat> signal(16);
+
+		for(int i = 0; i < 16; i++){
+		
+			signal(i) = i+1;			
+		}
+
+		KALDI_LOG << "signal.Dim() = " << signal.Dim();
+
+		WPT(&signal, 16, 3, 3, &output, wavelet_type);
 	}
 
 	// opts_.num_feats;
