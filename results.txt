@@ -45,3 +45,7 @@ default values for all nj’s, haar, 39 feats, j = 12, max, min, L2 norm, no dit
 %WER 14.84 [ 4242 / 28576, 910 ins, 413 del, 2919 sub ] exp/tri1/decode/wer_19
 // For 25ms/10ms shift window, the sample size is 500 so J = 8 is maximum, 2^8 = 256.
 
+wpt max, min, L2 norm for every subbands,
+%WER 21.99 [ 6283 / 28576, 2261 ins, 269 del, 3753 sub ] exp/mono0a/decode/wer_19
+%WER 15.53 [ 4438 / 28576, 1828 ins, 156 del, 2454 sub ] exp/tri1/decode/wer_19
+
