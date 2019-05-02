@@ -45,7 +45,7 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 
 		Vector<BaseFloat> vAvg(signal->Dim()/2), vDiff(signal->Dim()/2);
 
-		KALDI_ERR << "signal->Dim()/2 = " << signal->Dim()/2;
+		KALDI_LOG << "signal->Dim()/2 = " << signal->Dim()/2;
 
 		for(int i = 0; i < signal->Dim()/2; i++){
 
@@ -53,7 +53,7 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 			vDiff(i) = ((*signal)(2*i) - (*signal)((2*i)+1)) / 2;
 		}
 
-		KALDI_ERR << "signal->Dim()/2 = " << signal->Dim()/2;
+		KALDI_LOG << "signal->Dim()/2 = " << signal->Dim()/2;
 
 		output->insert(output->end(), vDiff.Max());
 		output->insert(output->end(), vDiff.Min());
