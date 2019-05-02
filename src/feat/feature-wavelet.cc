@@ -103,7 +103,7 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 			(*feature)(i) = output.at(i);
 			KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << (*feature)(i);
 		}
-	}
+	} else if()
 
 	// opts_.num_feats;
 	// opts_.wavelet_type;
