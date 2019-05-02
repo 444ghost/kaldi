@@ -25,7 +25,7 @@
 
 namespace kaldi {
 
-void DWT(VectorBase<BaseFloat> *signal, int length, int J, std::vector<BaseFloat> *output, std::string wavelet_type){
+void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, std::string wavelet_type){
 
 	if(signal->Dim() < pow(2, J)){
 
@@ -43,9 +43,9 @@ void DWT(VectorBase<BaseFloat> *signal, int length, int J, std::vector<BaseFloat
 			return;
 		}
 
-		Vector<BaseFloat> vAvg(length/2), vDiff(length/2);
+		Vector<BaseFloat> vAvg(signal->Dim()/2), vDiff(signal->Dim()/2);
 
-		for(int i = 0; i < length/2; i++){
+		for(int i = 0; i < signal->Dim()/2; i++){
 
 			vAvg(i) = ((*signal)(2*i) + (*signal)((2*i)+1)) / 2;
 			vDiff(i) = ((*signal)(2*i) - (*signal)((2*i)+1)) / 2;
@@ -55,8 +55,7 @@ void DWT(VectorBase<BaseFloat> *signal, int length, int J, std::vector<BaseFloat
 		output->insert(output->end(), vDiff.Min());
 		output->insert(output->end(), vDiff.Norm(2));
 
-		DWT(&vAvg, length/2, --J, output, wavelet_type);
-	
+		DWT(&vAvg, --J, output, wavelet_type);
 	}
 
 	return;
@@ -79,53 +78,60 @@ void DWT(VectorBase<BaseFloat> *signal, int length, int J, std::vector<BaseFloat
 	*/
 }
 
-void WPT(VectorBase<BaseFloat> *signal, int length, int J, int J2, std::vector<BaseFloat> *output, std::string wavelet_type){
+void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, std::string wavelet_type){
 
-	KALDI_LOG << "signal->Dim() = " << signal->Dim();
-	KALDI_LOG << "J = " << J;
-	KALDI_LOG << "J2 = " << J2;
+	if(signal->Dim() < 2 * pow(2, J)){
+
+		KALDI_ERR << "444ghost.ERROR in feature-wavelet.cc: too many decomposition levels for current window size(sample size)";
+		return;
+	}
+	
+	Vector<BaseFloat> argSignal(*signal);
+	int length = argSignal.Dim();
+	Vector<BaseFloat> buffer(length);
 
 	if(wavelet_type == "haar"){
 
-		if(J == 0 || J2 == 0){
+		for(int n = 0; n < J; n++){ // the number of decomposition level J
 
-			output->insert(output->end(), signal->Max());
-			output->insert(output->end(), signal->Min());
-			output->insert(output->end(), signal->Norm(2));
-			KALDI_LOG << "exit here?" << J;
-			return;
-		}
+			for(int m = 0; m < pow(2, n); m++){ // the number of subbands for each level m
+				
+				//KALDI_LOG << "m = " << m;
+					
+				Vector<BaseFloat> vAvg(length/2), vDiff(length/2);
 
-		Vector<BaseFloat> vAvg(length/2), vDiff(length/2);
-
-		for(int i = 0; i < length/2; i++){
-
-			vAvg(i) = ((*signal)(2*i) + (*signal)((2*i)+1)) / 2;
-			vDiff(i) = ((*signal)(2*i) - (*signal)((2*i)+1)) / 2;
-		}
-
-		output->insert(output->end(), vAvg.Max());
-		output->insert(output->end(), vAvg.Min());
-		output->insert(output->end(), vAvg.Norm(2));
-		output->insert(output->end(), vDiff.Max());
-		output->insert(output->end(), vDiff.Min());
-		output->insert(output->end(), vDiff.Norm(2));
-
-		for(int i = 0; i < length/2; i++){
-
-			KALDI_LOG << "vAvg(" << i << ") = " << vAvg(i);
-		}
-
-		for(int i = 0; i < length/2; i++){
-
-			KALDI_LOG << "vDiff(" << i << ") = " << vDiff(i);
-		}
-
-		KALDI_LOG << "**************************************";
-
-		WPT(&vAvg, length/2, --J, J2, output, wavelet_type);
-		WPT(&vDiff, length/2, J, --J2, output, wavelet_type);
+				for(int o = 0; o < length/2; o++){ // average and difference for all subbands at current J
 	
+					vAvg(o) = (argSignal((2*o) + ((length)*m)) + argSignal((2*o) + ((length)*m) + 1)) / 2;
+					vDiff(o) = (argSignal((2*o) + ((length)*m)) - argSignal((2*o) + ((length)*m) + 1)) / 2;
+					buffer(o + ((length)*m) ) = vAvg(o);
+					buffer(o + ((length)*m) + (length/2)) = vDiff(o);
+					//KALDI_LOG << "((length/2)*m) + o = " << ((length/2)*m) + o;
+				}
+
+				output->insert(output->end(), vAvg.Max());
+				output->insert(output->end(), vAvg.Min());
+				output->insert(output->end(), vAvg.Norm(2));
+				output->insert(output->end(), vDiff.Max());
+				output->insert(output->end(), vDiff.Min());
+				output->insert(output->end(), vDiff.Norm(2));
+
+				vAvg.SetZero(); // re-assigning values in the for state above so may not be necessary
+				vDiff.SetZero();
+				/*
+				for(int p = 0; p < buffer.Dim(); p++){
+
+					KALDI_LOG << "buffer(" << p << ") = " << buffer(p);					
+				}
+				KALDI_LOG << "---------------------------------";
+				*/
+			}
+
+			argSignal.SetZero();
+			argSignal.CopyFromVec(buffer);
+			buffer.SetZero();
+			length /= 2;
+		}
 	}
 
 	return;
@@ -142,40 +148,26 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 	std::string transform_type = opts_.transform_type;
 	std::string wavelet_type = opts_.wavelet_type;
 
+	int J = opts_.decomposition_level;
+	std::vector<BaseFloat> output;
+	Vector<BaseFloat> signal(*signal_frame);
+
 	if(transform_type == "dwt"){
 
-		int length = signal_frame->Dim();
-		int J = opts_.decomposition_level;
-		std::vector<BaseFloat> output;
-		Vector<BaseFloat> signal(*signal_frame);
+		DWT(&signal, J, &output, wavelet_type);
 
-		DWT(&signal, length, J, &output, wavelet_type);
-
-		for(int i = 0; i < opts_.num_feats; i++){
-
-			(*feature)(i) = output.at(i);
-			KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << (*feature)(i);
-		}
-<<<<<<< HEAD
-	} else if()
-=======
 	} else if(transform_type == "wpt"){
 
-		int length = signal_frame->Dim();
-		int J = opts_.decomposition_level;
-		std::vector<BaseFloat> output;
-		Vector<BaseFloat> signal(16);
-
-		for(int i = 0; i < 16; i++){
-		
-			signal(i) = i+1;			
-		}
-
-		KALDI_LOG << "signal.Dim() = " << signal.Dim();
-
-		WPT(&signal, 16, 3, 3, &output, wavelet_type);
+		WPT(&signal, J, &output, wavelet_type);
 	}
->>>>>>> origin/master
+
+	KALDI_LOG << "output.size() = " << output.size();
+
+	for(int i = 0; i < opts_.num_feats; i++){
+
+		(*feature)(i) = output.at(i);
+		//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << (*feature)(i);
+	}
 
 	// opts_.num_feats;
 	// opts_.wavelet_type;

@@ -6,7 +6,7 @@ Kaldi[1] doesn't have any wavelet transform modules but files contained in this 
 
 The conf/wavelet.conf file allows you to change "num-feats" and "decomposition-level" options. The default setup uses each subband's max, min, and L2 norm. Therefore for every "decomposition-level", say J:
  - (J+1) * 3 features (discrete wavelet transform) 
- - 2^(J) * 3 features (wavelet packet transform)
+ - -?? (wavelet packet transform)
  
  are required. 
 
