@@ -2,7 +2,7 @@
 
 Wavelet Transform Feature Extraction Module for Kaldi
 ============
-Kaldi[1] doesn't have any wavelet transform modules but files contained in this repository should help you extract acoustic features using wavelet transforms. Many papers suggest the wavelet transform features don't necessarily give better WERs but learning how feature extraction works in Kaldi is enough for me. This work is still in progress for better WERs.
+Kaldi[1] doesn't have any wavelet transform modules but files contained in this repository should help you extract acoustic features using wavelet transforms. This work is still in progress for better WERs.
 
 The conf/wavelet.conf file allows you to change "num-feats" and "decomposition-level" options.
 
