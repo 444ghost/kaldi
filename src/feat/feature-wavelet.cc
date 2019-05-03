@@ -114,11 +114,11 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 				}
 
 				output->insert(output->end(), vAvg.Max());
-				output->insert(output->end(), vAvg.Min());
-				output->insert(output->end(), vAvg.Norm(2));
+				//output->insert(output->end(), vAvg.Min());
+				//output->insert(output->end(), vAvg.Norm(2));
 				output->insert(output->end(), vDiff.Max());
-				output->insert(output->end(), vDiff.Min());
-				output->insert(output->end(), vDiff.Norm(2));
+				//output->insert(output->end(), vDiff.Min());
+				//output->insert(output->end(), vDiff.Norm(2));
 
 				vAvg.SetZero(); // re-assigning values in the for state above so may not be necessary
 				vDiff.SetZero();
@@ -165,13 +165,15 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 		WPT(&signal, J, &output, wavelet_type);
 	}
 
-	KALDI_LOG << "output.size() = " << output.size();
+	//KALDI_LOG << "output.size() = " << output.size();
 
-	for(int i = 0; i < opts_.num_feats; i++){
+	for(int i = 0; i < opts_.num_feats - 1; i++){
 
 		(*feature)(i) = output.at(i);
 		//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << (*feature)(i);
 	}
+
+	(*feature)(opts_.num_feats - 1) = signal.Norm(2);
 
 	// opts_.num_feats;
 	// opts_.wavelet_type;

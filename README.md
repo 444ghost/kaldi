@@ -4,13 +4,9 @@ Wavelet Transform Feature Extraction Module for Kaldi
 ============
 Kaldi[1] doesn't have any wavelet transform modules but files contained in this repository should help you extract acoustic features using wavelet transforms. Many papers suggest the wavelet transform features don't necessarily give better WERs but learning how feature extraction works in Kaldi is enough for me. This work is still in progress for better WERs.
 
-The conf/wavelet.conf file allows you to change "num-feats" and "decomposition-level" options. The default setup uses each subband's max, min, and L2 norm. Therefore for every "decomposition-level", say J:
- - (J+1) * 3 features (discrete wavelet transform) 
- - -?? (wavelet packet transform)
- 
- are required. 
+The conf/wavelet.conf file allows you to change "num-feats" and "decomposition-level" options.
 
-The size of window should be considered when changing "decomposition-level". The default setup uses 25ms wide window with 10ms shift. This results in 500 samples per window in which case the decomposition can be applied recursively only 8 times, 500 < 2^8 = 256 < 2^9 = 512.
+The size of window should be carefully chosen when changing "decomposition-level". The default setup uses 25ms wide window with 10ms shift. This results in 500 samples per window where the decomposition can be applied recursively up to only 8 times, 500 < 2^8 = 256 < 2^9 = 512.
 
 Kaldi version: 5.5.268 77ac79f70 
 
