@@ -32,6 +32,8 @@ Kaldi tutorials [5], [6].
 
 VM symbolic link on Windows [7].
 
+Neural network tutorials for Kaldi [8].
+
  
 Reference
 ---------
@@ -48,4 +50,6 @@ Reference
 [6] http://www.inf.ed.ac.uk/teaching/courses/asr/2018-19/lab1.pdf
    
 [7] https://www.nextofwindows.com/virtualbox-unable-to-merge-not-enough-free-storage-space
+
+[8] http://jrmeyer.github.io/asr/2016/12/15/DNN-AM-Kaldi.html
 
