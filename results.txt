@@ -8,10 +8,24 @@ default	yes	-	Fourier/DCT	50	-	yes		yes		25ms	10ms	MFCCs					3.24/2.48
 
 default	--fake	haar	dwt		24	7	no		no		25ms	10ms	max, min, L2 norm for each subband	10.60/7.11 "
 default	--fake	haar	dwt		24	7	no		no		25ms	10ms	max, min, L2 norm for each subband	10.90/6.91 "
-default --fake	haar	dwt		27	8	no		no		25ms	10ms	max, min, L2 norm for each subband	12.61/8.20
-default --fake	haar	dwt		39	12	no		no		25ms	10ms	max, min, L2 norm for each subband	21.00/14.84
-default --fake	haar	wpt		42	3	no		no		25ms	10ms	max, min, L2 norm for each subband	21.99/15.53
+default	--fake	haar	dwt		24	7	no		no		40ms	10ms	max, min, L2 norm for each subband	10.04/6.81
+default	--fake	haar	dwt		24	7	no		no		40ms	15ms	max, min, L2 norm for each subband	9.11/5.31
+default	--fake	haar	dwt		24	7	no		no		40ms	20ms	max, min, L2 norm for each subband	9.49/5.90
+default	--fake	haar	dwt		24	7	no		no		50ms	10ms	max, min, L2 norm for each subband	9.47/6.67
+default	--fake	haar	dwt		24	7	no		no		50ms	15ms	max, min, L2 norm for each subband	9.32/5.82
+default	--fake	haar	dwt		24	7	no		no		50ms	20ms	max, min, L2 norm for each subband	8.75/5.49
+default --fake	haar	dwt		27	8	no		no		50ms	20ms	max, min, L2 norm for each subband	9.21/5.81
+
+default --fake	haar	wpt		42	3	no		no		25ms	10ms	max, min, L2 norm for each subband	19.93/13.55
 default --fake	haar	wpt		15	3	no		no		25ms	10ms	max, L2 norm for window			15.54/10.86
-default --fake	haar	wpt		31	4	no		no		25ms	10ms	max, L2 norm for window			15.63/11.13
+default --fake	haar	wpt_5k		15	5/1	no		no		25ms	10ms	max, min, L2 norm for window
+default --fake	haar	wpt_5k		15	5/2	no		no		25ms	10ms	max, min, L2 norm for window			
+default --fake	haar	wpt_5k		31	6/1	no		no		25ms	10ms	max, min, L2 norm for window	
+default --fake	haar	wpt_5k		31	6/2	no		no		25ms	10ms	max, min, L2 norm for window	
+default --fake	haar	wpt_5k		31	6/2	no		no		25ms	10ms	max, min, L2 norm for window		11.78/7.58
+default --fake	haar	wpt_5k		31	6/2	no		no		50ms	15ms	max, min, L2 norm for window		10.02/6.31
+
+
+
 
 

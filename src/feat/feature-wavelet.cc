@@ -82,7 +82,7 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 	*/
 }
 
-void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, std::string wavelet_type){
+void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, std::string wavelet_type, int zoom){
 
 	if(signal->Dim() < 2 * pow(2, J)){
 
@@ -90,8 +90,8 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 		return;
 	}
 	
-	Vector<BaseFloat> argSignal(*signal);
-	int length = argSignal.Dim();
+	Vector<BaseFloat> vSignal(*signal);
+	int length = vSignal.Dim();
 	Vector<BaseFloat> buffer(length);
 
 	if(wavelet_type == "haar"){
@@ -106,23 +106,38 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 
 				for(int o = 0; o < length/2; o++){ // average and difference for all subbands at current J
 	
-					vAvg(o) = (argSignal((2*o) + ((length)*m)) + argSignal((2*o) + ((length)*m) + 1)) / 2;
-					vDiff(o) = (argSignal((2*o) + ((length)*m)) - argSignal((2*o) + ((length)*m) + 1)) / 2;
+					vAvg(o) = (vSignal((2*o) + ((length)*m)) + vSignal((2*o) + ((length)*m) + 1)) / 2;
+					vDiff(o) = (vSignal((2*o) + ((length)*m)) - vSignal((2*o) + ((length)*m) + 1)) / 2;
 					buffer(o + ((length)*m) ) = vAvg(o);
 					buffer(o + ((length)*m) + (length/2)) = vDiff(o);
 					//KALDI_LOG << "((length/2)*m) + o = " << ((length/2)*m) + o;
 				}
 
-				output->insert(output->end(), vAvg.Max());
-				//output->insert(output->end(), vAvg.Min());
-				//output->insert(output->end(), vAvg.Norm(2));
-				output->insert(output->end(), vDiff.Max());
-				//output->insert(output->end(), vDiff.Min());
-				//output->insert(output->end(), vDiff.Norm(2));
+				if(n >= zoom){ // frequency filter 0Hz ~ 20kHz/(2^n)
 
+					if(zoom != 0){
+						if(m < pow(2, n)/2){
+							output->insert(output->end(), vAvg.Max());
+							//output->insert(output->end(), vAvg.Min());
+							//output->insert(output->end(), vAvg.Norm(2));
+							output->insert(output->end(), vDiff.Max());
+							//output->insert(output->end(), vDiff.Min());
+							//output->insert(output->end(), vDiff.Norm(2));
+						}
+					} else{
+
+						output->insert(output->end(), vAvg.Max());
+						//output->insert(output->end(), vAvg.Min());
+						//output->insert(output->end(), vAvg.Norm(2));
+						output->insert(output->end(), vDiff.Max());
+						//output->insert(output->end(), vDiff.Min());
+						//output->insert(output->end(), vDiff.Norm(2));
+					}
+				}
+				/*
 				vAvg.SetZero(); // re-assigning values in the for state above so may not be necessary
 				vDiff.SetZero();
-				/*
+				
 				for(int p = 0; p < buffer.Dim(); p++){
 
 					KALDI_LOG << "buffer(" << p << ") = " << buffer(p);					
@@ -131,8 +146,8 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 				*/
 			}
 
-			argSignal.SetZero();
-			argSignal.CopyFromVec(buffer);
+			vSignal.SetZero();
+			vSignal.CopyFromVec(buffer);
 			buffer.SetZero();
 			length /= 2;
 		}
@@ -162,7 +177,12 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 
 	} else if(transform_type == "wpt"){
 
-		WPT(&signal, J, &output, wavelet_type);
+		/*
+		Vector<BaseFloat> _10k(signal.Dim()/2);
+		_10k.CopyFromVec(_10kFilter(&signal));
+		*/
+		WPT(&signal, J, &output, wavelet_type, opts_.dyadic_zoom);
+		(*feature)(opts_.num_feats - 1) = signal.Norm(2);
 	}
 
 	//KALDI_LOG << "output.size() = " << output.size();
@@ -173,7 +193,7 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 		//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << (*feature)(i);
 	}
 
-	(*feature)(opts_.num_feats - 1) = signal.Norm(2);
+	//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << opts_.num_feats - 1 << ") = " << (*feature)(opts_.num_feats - 1);
 
 	// opts_.num_feats;
 	// opts_.wavelet_type;
@@ -209,6 +229,7 @@ WaveletComputer::WaveletComputer(const WaveletOptions &opts):
 	KALDI_LOG << "wavelet_type = "<< opts.wavelet_type;
 	KALDI_LOG << "decomposition_level = " << opts.decomposition_level;
 	KALDI_LOG << "transform_type = " << opts.transform_type;
+	KALDI_LOG << "dyadic_zoom = " << opts.dyadic_zoom;
 	KALDI_LOG << "<---------------444ghost.LOG in feature-wavelet.cc";
 }
 

@@ -33,11 +33,13 @@ struct WaveletOptions {
   std::string wavelet_type;
   int32 decomposition_level;
   std::string transform_type;
+  int32 dyadic_zoom;
 
   WaveletOptions() : num_feats(1),
                      wavelet_type("1"),
 		     decomposition_level(1), 
-		     transform_type("dwt") {}
+		     transform_type("dwt"),
+		     dyadic_zoom(0) {}
 
   void Register(OptionsItf *opts) {
     frame_opts.Register(opts);
@@ -46,6 +48,7 @@ struct WaveletOptions {
     opts->Register("wavelet-type", &wavelet_type, "Wavelet type");
     opts->Register("decomposition-level", &decomposition_level, "Wavelet transform decomposition level");
     opts->Register("transform-type", &transform_type, "Wavelet transform type");
+    opts->Register("dyadic-zoom", &dyadic_zoom, "dyadic zoom");
   }
 };
 
