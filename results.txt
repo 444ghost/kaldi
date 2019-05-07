@@ -16,14 +16,21 @@ default	--fake	haar	dwt		24	7	no		no		50ms	15ms	max, min, L2 norm for each subba
 default	--fake	haar	dwt		24	7	no		no		50ms	20ms	max, min, L2 norm for each subband	8.75/5.49
 default --fake	haar	dwt		27	8	no		no		50ms	20ms	max, min, L2 norm for each subband	9.21/5.81
 
-default --fake	haar	wpt		42	3	no		no		25ms	10ms	max, min, L2 norm for each subband	19.93/13.55
-default --fake	haar	wpt		15	3	no		no		25ms	10ms	max, L2 norm for window			15.54/10.86
-default --fake	haar	wpt_5k		15	5/1	no		no		25ms	10ms	max, min, L2 norm for window
-default --fake	haar	wpt_5k		15	5/2	no		no		25ms	10ms	max, min, L2 norm for window			
-default --fake	haar	wpt_5k		31	6/1	no		no		25ms	10ms	max, min, L2 norm for window	
-default --fake	haar	wpt_5k		31	6/2	no		no		25ms	10ms	max, min, L2 norm for window	
-default --fake	haar	wpt_5k		31	6/2	no		no		25ms	10ms	max, min, L2 norm for window		11.78/7.58
-default --fake	haar	wpt_5k		31	6/2	no		no		50ms	15ms	max, min, L2 norm for window		10.02/6.31
+default --fake	haar	wpt		42	3/0	no		no		25ms	10ms	max, min, L2 norm for each subband	19.93/13.55
+default --fake	haar	wpt		15	3/0	no		no		25ms	10ms	max, L2 norm for window			15.54/10.86
+default --fake	haar	wpt		15	5/1	no		no		25ms	10ms	max, L2 norm for window			12.12/7.82
+default --fake	haar	wpt		15	5/2	no		no		25ms	10ms	max, L2 norm for window			10.34/6.83
+default --fake	haar	wpt		15	5/2	no		no		50ms	15ms	max, L2 norm for window			9.07/6.13
+default --fake	haar	wpt		15	5/2	no		no		50ms	20ms	max, L2 norm for window			10.32/6.66
+default --fake	haar	wpt		31	6/1	no		no		25ms	10ms	max, L2 norm for window			14.01/8.25
+default --fake	haar	wpt		31	6/2	no		no		25ms	10ms	max, L2 norm for window			11.72/7.31
+default --fake	haar	wpt		31	6/2	no		no		50ms	15ms	max, L2 norm for window			10.02/6.31
+default --fake	haar	wpt		31	6/2	no		no		50ms	20ms	max, L2 norm for window			10.53/6.55
+
+default --fake	haar	wpt		29	5/2	no		no		50ms	15ms	max, min, L2 norm for window		9.83/6.56
+default --fake	haar	wpt		28	5/2	no		no		25ms	10ms	max, L2 norm for each subband		12.20/7.52
+	
+
 
 
 
