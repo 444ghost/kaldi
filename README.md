@@ -4,9 +4,9 @@ Wavelet Transform Feature Extraction Module for Kaldi
 ============
 Kaldi[1] doesn't have any wavelet transform modules but files contained in this repository should help you extract acoustic features using wavelet transforms. This work is still in progress for better WERs.
 
-The conf/wavelet.conf file allows you to change "num-feats" and "decomposition-level" options.
+The conf/wavelet.conf file allows you to change wavelet tranform options.
 
-The size of window should be carefully chosen when changing "decomposition-level". The default setup uses 25ms wide window with 10ms shift. This results in 500 samples per window where the decomposition can be applied recursively up to only 8 times, 500 < 2^8 = 256 < 2^9 = 512.
+Currently supports discrete wavelet transform and wavelet packet transform with haar and daubechies 4 wavelets.
 
 Kaldi version: 5.5.268 77ac79f70 
 
@@ -34,6 +34,7 @@ VM symbolic link on Windows [7].
 
 Neural network tutorials for Kaldi [8].
 
+Daubechies family of wavelets [9], [10].
  
 Reference
 ---------
@@ -52,4 +53,8 @@ Reference
 [7] https://www.nextofwindows.com/virtualbox-unable-to-merge-not-enough-free-storage-space
 
 [8] http://jrmeyer.github.io/asr/2016/12/15/DNN-AM-Kaldi.html
+
+[9] http://bearcave.com/misl/misl_tech/wavelets/matrix/index.html
+
+[10] http://bearcave.com/misl/misl_tech/wavelets/daubechies/index.html
 
