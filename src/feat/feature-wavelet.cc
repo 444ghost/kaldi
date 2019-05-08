@@ -19,6 +19,7 @@
 
 
 #include "feat/feature-wavelet.h"
+#include <numeric>
 #include <algorithm>
 #include <complex>
 
@@ -43,23 +44,102 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 			return;
 		}
 
-		Vector<BaseFloat> vAvg(signal->Dim()/2), vDiff(signal->Dim()/2);
+		Vector<BaseFloat> vLow(signal->Dim()/2), vHigh(signal->Dim()/2);
 
 		KALDI_LOG << "signal->Dim()/2 = " << signal->Dim()/2;
 
 		for(int i = 0; i < signal->Dim()/2; i++){
 
-			vAvg(i) = ((*signal)(2*i) + (*signal)((2*i)+1)) / 2;
-			vDiff(i) = ((*signal)(2*i) - (*signal)((2*i)+1)) / 2;
+			vLow(i) = ((*signal)(2*i) + (*signal)((2*i)+1)) / 2;
+			vHigh(i) = ((*signal)(2*i) - (*signal)((2*i)+1)) / 2;
 		}
 
 		KALDI_LOG << "signal->Dim()/2 = " << signal->Dim()/2;
 
-		output->insert(output->end(), vDiff.Max());
-		output->insert(output->end(), vDiff.Min());
-		output->insert(output->end(), vDiff.Norm(2));
+		output->insert(output->end(), vHigh.Max());
+		output->insert(output->end(), vHigh.Min());
+		output->insert(output->end(), vHigh.Norm(2));
 
-		DWT(&vAvg, --J, output, wavelet_type);
+		DWT(&vLow, --J, output, wavelet_type);
+	} else if(wavelet_type == "db4"){
+
+		if(signal->Dim() > 3){
+
+			float l0 = 0.4829629131445341, l1 = 0.8365163037378077, l2 = 0.2241438680420134, l3 = -0.1294095225512603;
+			float h0 = l3, h1 = -l2, h2 = l1, h3 = -l0;
+			
+			Vector<BaseFloat> vLow(signal->Dim()/2), vHigh(signal->Dim()/2);
+
+			if(J == 0){
+
+				Vector<BaseFloat> vLow(signal->Dim()/2);
+
+				for(int i = 0; i < signal->Dim() - 3; i = i + 2){ // instead of signal->Dim() - 2 for exactly 4 dimension long signal
+
+					float low = 0;
+
+					low += (*signal)(i+0)*l0;
+					low += (*signal)(i+1)*l1;
+					low += (*signal)(i+2)*l2;
+					low += (*signal)(i+3)*l3;
+					
+					vLow(i/2) = low;
+				}
+
+				float low = 0;
+
+				low += (*signal)(signal->Dim() - 2)*l0;
+				low += (*signal)(signal->Dim() - 1)*l1;
+				low += (*signal)(0)*l2;
+				low += (*signal)(1)*l3;
+
+				vLow((signal->Dim()/2) - 1) = low;
+
+				output->insert(output->end(), vLow.Max());
+				output->insert(output->end(), vLow.Min());
+				output->insert(output->end(), vLow.Norm(2));
+				return;
+			}
+
+			for(int i = 0; i < signal->Dim() - 3; i = i + 2){ // instead of signal->Dim() - 2 for exactly 4 dimension long signal
+
+				float low = 0, high = 0;
+
+				low += (*signal)(i+0)*l0;
+				low += (*signal)(i+1)*l1;
+				low += (*signal)(i+2)*l2;
+				low += (*signal)(i+3)*l3;
+
+				high += (*signal)(i+0)*h0;
+				high += (*signal)(i+1)*h1;
+				high += (*signal)(i+2)*h2;
+				high += (*signal)(i+3)*h3;
+				
+				vLow(i/2) = low;
+				vHigh(i/2) = high;
+			}
+
+			float low = 0, high = 0;
+
+			low += (*signal)(signal->Dim() - 2)*l0;
+			low += (*signal)(signal->Dim() - 1)*l1;
+			low += (*signal)(0)*l2;
+			low += (*signal)(1)*l3;
+
+			high += (*signal)(signal->Dim() - 2)*h0;
+			high += (*signal)(signal->Dim() - 1)*h1;
+			high += (*signal)(0)*h2;
+			high += (*signal)(1)*h3;
+
+			vLow((signal->Dim()/2) - 1) = low;
+			vHigh((signal->Dim()/2) - 1) = high;
+
+			output->insert(output->end(), vHigh.Max());
+			output->insert(output->end(), vHigh.Min());
+			output->insert(output->end(), vHigh.Norm(2));
+
+			DWT(&vLow, --J, output, wavelet_type);
+		}
 	}
 
 	return;
@@ -72,12 +152,12 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 	
 	for(int i = 0; i < length/2; i++){
 
-		KALDI_LOG << "vAvg(" << i << ") = " << vAvg(i);
+		KALDI_LOG << "vLow(" << i << ") = " << vLow(i);
 	}
 
 	for(int i = 0; i < length/2; i++){
 
-		KALDI_LOG << "vDiff(" << i << ") = " << vDiff(i);
+		KALDI_LOG << "vHigh(" << i << ") = " << vHigh(i);
 	}
 	*/
 }
@@ -102,14 +182,14 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 				
 				//KALDI_LOG << "m = " << m;
 					
-				Vector<BaseFloat> vAvg(length/2), vDiff(length/2);
+				Vector<BaseFloat> vLow(length/2), vHigh(length/2);
 
 				for(int o = 0; o < length/2; o++){ // average and difference for all subbands at current J
 	
-					vAvg(o) = (vSignal((2*o) + ((length)*m)) + vSignal((2*o) + ((length)*m) + 1)) / 2;
-					vDiff(o) = (vSignal((2*o) + ((length)*m)) - vSignal((2*o) + ((length)*m) + 1)) / 2;
-					buffer(o + ((length)*m) ) = vAvg(o);
-					buffer(o + ((length)*m) + (length/2)) = vDiff(o);
+					vLow(o) = (vSignal((2*o) + ((length)*m)) + vSignal((2*o) + ((length)*m) + 1)) / 2;
+					vHigh(o) = (vSignal((2*o) + ((length)*m)) - vSignal((2*o) + ((length)*m) + 1)) / 2;
+					buffer(o + ((length)*m) ) = vLow(o);
+					buffer(o + ((length)*m) + (length/2)) = vHigh(o);
 					//KALDI_LOG << "((length/2)*m) + o = " << ((length/2)*m) + o;
 				}
 
@@ -117,26 +197,26 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 
 					if(zoom != 0){
 						if(m < pow(2, n)/2){
-							output->insert(output->end(), vAvg.Max());
-							//output->insert(output->end(), vAvg.Min());
-							//output->insert(output->end(), vAvg.Norm(2));
-							output->insert(output->end(), vDiff.Max());
-							//output->insert(output->end(), vDiff.Min());
-							//output->insert(output->end(), vDiff.Norm(2));
+							output->insert(output->end(), vLow.Max());
+							//output->insert(output->end(), vLow.Min());
+							//output->insert(output->end(), vLow.Norm(2));
+							output->insert(output->end(), vHigh.Max());
+							//output->insert(output->end(), vHigh.Min());
+							//output->insert(output->end(), vHigh.Norm(2));
 						}
 					} else{
 
-						output->insert(output->end(), vAvg.Max());
-						//output->insert(output->end(), vAvg.Min());
-						//output->insert(output->end(), vAvg.Norm(2));
-						output->insert(output->end(), vDiff.Max());
-						//output->insert(output->end(), vDiff.Min());
-						//output->insert(output->end(), vDiff.Norm(2));
+						output->insert(output->end(), vLow.Max());
+						//output->insert(output->end(), vLow.Min());
+						//output->insert(output->end(), vLow.Norm(2));
+						output->insert(output->end(), vHigh.Max());
+						//output->insert(output->end(), vHigh.Min());
+						//output->insert(output->end(), vHigh.Norm(2));
 					}
 				}
 				/*
-				vAvg.SetZero(); // re-assigning values in the for state above so may not be necessary
-				vDiff.SetZero();
+				vLow.SetZero(); // re-assigning values in the for state above so may not be necessary
+				vHigh.SetZero();
 				
 				for(int p = 0; p < buffer.Dim(); p++){
 
@@ -174,7 +254,6 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 	if(transform_type == "dwt"){
 
 		DWT(&signal, J, &output, wavelet_type);
-
 	} else if(transform_type == "wpt"){
 
 		/*

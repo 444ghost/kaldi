@@ -16,6 +16,8 @@ default	--fake	haar	dwt		24	7	no		no		50ms	15ms	max, min, L2 norm for each subba
 default	--fake	haar	dwt		24	7	no		no		50ms	20ms	max, min, L2 norm for each subband	8.75/5.49
 default --fake	haar	dwt		27	8	no		no		50ms	20ms	max, min, L2 norm for each subband	9.21/5.81
 
+default	--fake	db4	dwt		24	7	no		no		40ms	15ms	max, min, L2 norm for each subband	7.13/4.18
+
 default --fake	haar	wpt		42	3/0	no		no		25ms	10ms	max, min, L2 norm for each subband	19.93/13.55
 default --fake	haar	wpt		15	3/0	no		no		25ms	10ms	max, L2 norm for window			15.54/10.86
 default --fake	haar	wpt		15	5/1	no		no		25ms	10ms	max, L2 norm for window			12.12/7.82
