@@ -5,15 +5,13 @@ Wavelet Transform Feature Extraction Module for Kaldi
 Kaldi[1] doesn't have any wavelet transform modules but files contained in this repository should help you extract acoustic features using wavelet transforms. This work is still in progress for better WERs.
 
 The conf/wavelet.conf file allows you to change wavelet tranform options.
-1. --wavelet-type // wavelet type currently supports haar and db4
-2. --decomposition-level // decomposition level
-3. --num-feats // number of features
-4. --transform-type // discrete wavelet transform(dwt) or wavelet packet transform(wpt)
-5. --dyadic-zoom // wpt's time-frequency resolution localization factor, can be 0 for no effect
+ - --wavelet-type // wavelet type currently supports haar and db4
+ - --decomposition-level // decomposition level
+ - --num-feats // number of features
+ - --transform-type // discrete wavelet transform(dwt) or wavelet packet transform(wpt)
+ - --dyadic-zoom // wpt's time-frequency resolution localization factor, can be 0 for no effect
 
---transform-type option should match script's -t option below.
-
-Currently supports discrete wavelet transform and wavelet packet transform with haar and daubechies 4 wavelets.
+--transform-type option should match -t option of the scripts below.
 
 Kaldi version: 5.5.268 77ac79f70 
 
