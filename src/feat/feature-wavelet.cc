@@ -17,6 +17,7 @@
 // See the Apache 2 License for the specific language governing permissions and
 // limitations under the License.
 
+// future work: convert std::vector<BaseFloat> *output to Vector<BaseFloat> output
 
 #include "feat/feature-wavelet.h"
 #include <numeric>
@@ -70,37 +71,6 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 			
 			Vector<BaseFloat> vLow(signal->Dim()/2), vHigh(signal->Dim()/2);
 
-			if(J == 0){
-
-				Vector<BaseFloat> vLow(signal->Dim()/2);
-
-				for(int i = 0; i < signal->Dim() - 3; i = i + 2){ // instead of signal->Dim() - 2 for exactly 4 dimension long signal
-
-					float low = 0;
-
-					low += (*signal)(i+0)*l0;
-					low += (*signal)(i+1)*l1;
-					low += (*signal)(i+2)*l2;
-					low += (*signal)(i+3)*l3;
-					
-					vLow(i/2) = low;
-				}
-
-				float low = 0;
-
-				low += (*signal)(signal->Dim() - 2)*l0;
-				low += (*signal)(signal->Dim() - 1)*l1;
-				low += (*signal)(0)*l2;
-				low += (*signal)(1)*l3;
-
-				vLow((signal->Dim()/2) - 1) = low;
-
-				output->insert(output->end(), vLow.Max());
-				output->insert(output->end(), vLow.Min());
-				output->insert(output->end(), vLow.Norm(2));
-				return;
-			}
-
 			for(int i = 0; i < signal->Dim() - 3; i = i + 2){ // instead of signal->Dim() - 2 for exactly 4 dimension long signal
 
 				float low = 0, high = 0;
@@ -134,11 +104,20 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 			vLow((signal->Dim()/2) - 1) = low;
 			vHigh((signal->Dim()/2) - 1) = high;
 
-			output->insert(output->end(), vHigh.Max());
-			output->insert(output->end(), vHigh.Min());
-			output->insert(output->end(), vHigh.Norm(2));
+			if(J == 0){
 
-			DWT(&vLow, --J, output, wavelet_type);
+				output->insert(output->end(), vLow.Max());
+				//output->insert(output->end(), vLow.Min());
+				output->insert(output->end(), vLow.Norm(2)/vLow.Dim());
+				return;
+			} else{
+
+				output->insert(output->end(), vHigh.Max());
+				//output->insert(output->end(), vHigh.Min());
+				output->insert(output->end(), vHigh.Norm(2)/vLow.Dim());
+
+				DWT(&vLow, --J, output, wavelet_type);
+			}
 		}
 	}
 
@@ -164,7 +143,7 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 
 void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, std::string wavelet_type, int zoom){
 
-	if(signal->Dim() < 2 * pow(2, J)){
+	if(signal->Dim() < 2 * pow(2, J - zoom)){
 
 		KALDI_ERR << "444ghost.ERROR in feature-wavelet.cc: too many decomposition levels for current window size(sample size)";
 		return;
@@ -196,6 +175,7 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 				if(n >= zoom){ // frequency filter 0Hz ~ 20kHz/(2^n)
 
 					if(zoom != 0){
+
 						if(m < pow(2, n)/2){
 							output->insert(output->end(), vLow.Max());
 							//output->insert(output->end(), vLow.Min());
@@ -222,14 +202,106 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 
 					KALDI_LOG << "buffer(" << p << ") = " << buffer(p);					
 				}
-				KALDI_LOG << "---------------------------------";
 				*/
 			}
-
+			
 			vSignal.SetZero();
 			vSignal.CopyFromVec(buffer);
 			buffer.SetZero();
 			length /= 2;
+		}
+	} else if(wavelet_type == "db4"){
+
+		if(vSignal.Dim() > 3){
+
+			float l0 = 0.4829629131445341, l1 = 0.8365163037378077, l2 = 0.2241438680420134, l3 = -0.1294095225512603;
+			float h0 = l3, h1 = -l2, h2 = l1, h3 = -l0;
+
+			for(int n = 0; n < J; n++){ // the number of decomposition level J
+
+				for(int m = 0; m < pow(2, n); m++){ // the number of subbands for each level m
+					
+					Vector<BaseFloat> vLow(length/2), vHigh(length/2);
+
+					for(int i = 0; i < length - 3; i = i + 2){ // instead of signal->Dim() - 2 for exactly 4 dimension long signal
+
+						float low = 0, high = 0;
+
+						low += vSignal(i + (length*m))*l0;
+						low += vSignal((i+1) + (length*m))*l1;
+						low += vSignal((i+2) + (length*m))*l2;
+						low += vSignal((i+3) + (length*m))*l3;
+
+						high += vSignal(i + (length*m))*h0;
+						high += vSignal((i+1) + (length*m))*h1;
+						high += vSignal((i+2) + (length*m))*h2;
+						high += vSignal((i+3) + (length*m))*h3;
+						
+						vLow(i/2) = low;
+						vHigh(i/2) = high;
+
+						buffer((i/2) + (length*m)) = low;
+						buffer((i/2) + (length*m) + (length/2)) = high;
+
+						//KALDI_LOG << "buffer(" << (i/2) + (length*m) << ") = " << low;
+						//KALDI_LOG << "buffer(" << (i/2) + (length*m) + (length/2) << ") = " << high;
+					}
+
+					float low = 0, high = 0;
+
+					low += vSignal((length*(m+1)) - 2)*l0;
+					low += vSignal((length*(m+1)) - 1)*l1;
+					low += vSignal(length*m)*l2;
+					low += vSignal((length*m) + 1)*l3;
+
+					high += vSignal((length*(m+1)) - 2)*h0;
+					high += vSignal((length*(m+1)) - 1)*h1;
+					high += vSignal(length*m)*h2;
+					high += vSignal((length*m) + 1)*h3;
+
+					vLow((length/2) -1) = low;
+					vHigh((length/2) -1) = high;
+
+					buffer(((length/2)-1) + (length*m)) = low;
+					buffer(((length/2)-1) + (length*m) + (length/2)) = high;
+
+					/*
+					KALDI_LOG << "buffer(" << ((length/2)-1) + (length*m) << ") = " << low;
+					KALDI_LOG << "buffer(" << ((length/2)-1) + (length*m) + (length/2) << ") = " << high;
+					KALDI_LOG << "-------------------";
+
+					for(int i = 0; i < buffer.Dim(); i++){
+
+						KALDI_LOG << "buffer(" << i << ") = " << buffer(i);
+					}
+					*/
+					if(n >= zoom){
+
+						if(zoom != 0){
+
+							if(m < pow(2, n)/2){
+								output->insert(output->end(), vLow.Max());
+								output->insert(output->end(), vHigh.Max());
+								//output->insert(output->end(), vLow.Min());
+								//output->insert(output->end(), vLow.Norm(2)/vLow.Dim());
+							}
+						} else{
+
+							output->insert(output->end(), vHigh.Max());
+							output->insert(output->end(), vLow.Max());
+							//output->insert(output->end(), vHigh.Min());
+							//output->insert(output->end(), vHigh.Norm(2)/vLow.Dim());
+						}
+					} 
+
+					//KALDI_LOG << "output->size() = " << output->size();
+				}
+
+				vSignal.SetZero();
+				vSignal.CopyFromVec(buffer);
+				buffer.SetZero();
+				length /= 2;
+			}
 		}
 	}
 
@@ -254,6 +326,7 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 	if(transform_type == "dwt"){
 
 		DWT(&signal, J, &output, wavelet_type);
+		//(*feature)(opts_.num_feats - 1) = signal.Norm(2);
 	} else if(transform_type == "wpt"){
 
 		/*
@@ -264,15 +337,11 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 		(*feature)(opts_.num_feats - 1) = signal.Norm(2);
 	}
 
-	//KALDI_LOG << "output.size() = " << output.size();
-
 	for(int i = 0; i < opts_.num_feats - 1; i++){
 
 		(*feature)(i) = output.at(i);
 		//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << i << ") = " << (*feature)(i);
 	}
-
-	//KALDI_LOG << "444ghost.LOG in feature-wavelet.cc: (*feature)(" << opts_.num_feats - 1 << ") = " << (*feature)(opts_.num_feats - 1);
 
 	// opts_.num_feats;
 	// opts_.wavelet_type;
@@ -287,14 +356,6 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 	for(int i = 0; i < 16; i++){
 	
 		signal(i) = i+1;			
-	}
-				
-
-	DWT(&signal, 16, 3, &output);
-
-	for(int i = 0; i < output.size(); i++){
-
-		KALDI_LOG << "output.at(" << i << ") = " << output.at(i);
 	}
 	*/
 }

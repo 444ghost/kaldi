@@ -1,7 +1,7 @@
 for x in exp/*/decode*; do [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh; done
 
 
-nj	cmvn	wavelet	transform	feats	J	dithering	x^2_windowing	window	shift	details:				mono/tri
+nj	cmvn	wavelet	transform	feats	J/zoom	dithering	x^2_windowing	window	shift	details:				mono/tri
 
 default	yes	-	Fourier/DCT	13	-	yes		yes		25ms	10ms	MFCCs					0.9/0.64
 default	yes	-	Fourier/DCT	50	-	yes		yes		25ms	10ms	MFCCs					3.24/2.48
@@ -17,20 +17,18 @@ default	--fake	haar	dwt		24	7	no		no		50ms	20ms	max, min, L2 norm for each subba
 default --fake	haar	dwt		27	8	no		no		50ms	20ms	max, min, L2 norm for each subband	9.21/5.81
 
 default	--fake	db4	dwt		24	7	no		no		40ms	15ms	max, min, L2 norm for each subband	7.13/4.18
+default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm for each subband		6.33/3.74
+default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm for each subband/Dim()	6.15/3.72
+default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max^2, L2 norm for each subband/Dim()	error gmm-init-mono.cc:133		
+default	--fake	db4	dwt		9	7	no		no		40ms	15ms	max, L2 norm for window			
 
 default --fake	haar	wpt		42	3/0	no		no		25ms	10ms	max, min, L2 norm for each subband	19.93/13.55
 default --fake	haar	wpt		15	3/0	no		no		25ms	10ms	max, L2 norm for window			15.54/10.86
-default --fake	haar	wpt		15	5/1	no		no		25ms	10ms	max, L2 norm for window			12.12/7.82
-default --fake	haar	wpt		15	5/2	no		no		25ms	10ms	max, L2 norm for window			10.34/6.83
-default --fake	haar	wpt		15	5/2	no		no		50ms	15ms	max, L2 norm for window			9.07/6.13
-default --fake	haar	wpt		15	5/2	no		no		50ms	20ms	max, L2 norm for window			10.32/6.66
-default --fake	haar	wpt		31	6/1	no		no		25ms	10ms	max, L2 norm for window			14.01/8.25
+default --fake	haar	wpt		15	4/1	no		no		25ms	10ms	max, L2 norm for window			12.12/7.82
+default --fake	haar	wpt		15	5/2	no		no		25ms	10ms	max, L2 norm for window			10.35/6.85
 default --fake	haar	wpt		31	6/2	no		no		25ms	10ms	max, L2 norm for window			11.72/7.31
-default --fake	haar	wpt		31	6/2	no		no		50ms	15ms	max, L2 norm for window			10.02/6.31
-default --fake	haar	wpt		31	6/2	no		no		50ms	20ms	max, L2 norm for window			10.53/6.55
+default --fake	haar	wpt		31	6/2	no		no		50ms	20ms	max, L2 norm for window					
 
-default --fake	haar	wpt		29	5/2	no		no		50ms	15ms	max, min, L2 norm for window		9.83/6.56
-default --fake	haar	wpt		28	5/2	no		no		25ms	10ms	max, L2 norm for each subband		12.20/7.52
 	
 
 
