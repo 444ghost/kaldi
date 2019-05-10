@@ -177,21 +177,44 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 					if(zoom != 0){
 
 						if(m < pow(2, n)/2){
+
+							if((n == J - 1) && (m == 0)){ // last level first subband for average
+							
+								output->insert(output->end(), vLow.Max());
+								//output->insert(output->end(), vLow.Min());
+								output->insert(output->end(), vLow.Norm(2));
+								//output->insert(output->end(), vHigh.Max());
+								//output->insert(output->end(), vHigh.Min());
+								//output->insert(output->end(), vHigh.Norm(2));
+							} else{
+
+								//output->insert(output->end(), vLow.Max());
+								//output->insert(output->end(), vLow.Min());
+								//output->insert(output->end(), vLow.Norm(2));
+								output->insert(output->end(), vHigh.Max());
+								//output->insert(output->end(), vHigh.Min());
+								output->insert(output->end(), vHigh.Norm(2));
+							}
+						}
+					} else{
+
+						if((n == J - 1) && (m == 0)){ // last level first subband for average
+							
 							output->insert(output->end(), vLow.Max());
+							//output->insert(output->end(), vLow.Min());
+							output->insert(output->end(), vLow.Norm(2));
+							//output->insert(output->end(), vHigh.Max());
+							//output->insert(output->end(), vHigh.Min());
+							//output->insert(output->end(), vHigh.Norm(2));
+						} else{
+
+							//output->insert(output->end(), vLow.Max());
 							//output->insert(output->end(), vLow.Min());
 							//output->insert(output->end(), vLow.Norm(2));
 							output->insert(output->end(), vHigh.Max());
 							//output->insert(output->end(), vHigh.Min());
-							//output->insert(output->end(), vHigh.Norm(2));
+							output->insert(output->end(), vHigh.Norm(2));
 						}
-					} else{
-
-						output->insert(output->end(), vLow.Max());
-						//output->insert(output->end(), vLow.Min());
-						//output->insert(output->end(), vLow.Norm(2));
-						output->insert(output->end(), vHigh.Max());
-						//output->insert(output->end(), vHigh.Min());
-						//output->insert(output->end(), vHigh.Norm(2));
 					}
 				}
 				/*
@@ -275,25 +298,51 @@ void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 						KALDI_LOG << "buffer(" << i << ") = " << buffer(i);
 					}
 					*/
-					if(n >= zoom){
+					if(n >= zoom){ // frequency filter 0Hz ~ 20kHz/(2^n)
 
 						if(zoom != 0){
 
 							if(m < pow(2, n)/2){
-								output->insert(output->end(), vLow.Max());
-								output->insert(output->end(), vHigh.Max());
-								//output->insert(output->end(), vLow.Min());
-								//output->insert(output->end(), vLow.Norm(2)/vLow.Dim());
+
+								if((n == J - 1) && (m == 0)){ // last level first subband for average
+								
+									output->insert(output->end(), vLow.Max());
+									//output->insert(output->end(), vLow.Min());
+									output->insert(output->end(), vLow.Norm(2));
+									//output->insert(output->end(), vHigh.Max());
+									//output->insert(output->end(), vHigh.Min());
+									//output->insert(output->end(), vHigh.Norm(2));
+								} else{
+
+									//output->insert(output->end(), vLow.Max());
+									//output->insert(output->end(), vLow.Min());
+									//output->insert(output->end(), vLow.Norm(2));
+									output->insert(output->end(), vHigh.Max());
+									//output->insert(output->end(), vHigh.Min());
+									output->insert(output->end(), vHigh.Norm(2));
+								}
 							}
 						} else{
 
-							output->insert(output->end(), vHigh.Max());
-							output->insert(output->end(), vLow.Max());
-							//output->insert(output->end(), vHigh.Min());
-							//output->insert(output->end(), vHigh.Norm(2)/vLow.Dim());
-						}
-					} 
+							if((n == J - 1) && (m == 0)){ // last level first subband for average
+								
+								output->insert(output->end(), vLow.Max());
+								//output->insert(output->end(), vLow.Min());
+								output->insert(output->end(), vLow.Norm(2));
+								//output->insert(output->end(), vHigh.Max());
+								//output->insert(output->end(), vHigh.Min());
+								//output->insert(output->end(), vHigh.Norm(2));
+							} else{
 
+								//output->insert(output->end(), vLow.Max());
+								//output->insert(output->end(), vLow.Min());
+								//output->insert(output->end(), vLow.Norm(2));
+								output->insert(output->end(), vHigh.Max());
+								//output->insert(output->end(), vHigh.Min());
+								output->insert(output->end(), vHigh.Norm(2));
+							}
+						}
+					}
 					//KALDI_LOG << "output->size() = " << output->size();
 				}
 
@@ -334,7 +383,7 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 		_10k.CopyFromVec(_10kFilter(&signal));
 		*/
 		WPT(&signal, J, &output, wavelet_type, opts_.dyadic_zoom);
-		(*feature)(opts_.num_feats - 1) = signal.Norm(2);
+		//(*feature)(opts_.num_feats - 1) = signal.Norm(2);
 	}
 
 	for(int i = 0; i < opts_.num_feats - 1; i++){

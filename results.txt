@@ -6,28 +6,32 @@ nj	cmvn	wavelet	transform	feats	J/zoom	dithering	x^2_windowing	window	shift	deta
 default	yes	-	Fourier/DCT	13	-	yes		yes		25ms	10ms	MFCCs					0.9/0.64
 default	yes	-	Fourier/DCT	50	-	yes		yes		25ms	10ms	MFCCs					3.24/2.48
 
-default	--fake	haar	dwt		24	7	no		no		25ms	10ms	max, min, L2 norm for each subband	10.60/7.11 "
-default	--fake	haar	dwt		24	7	no		no		25ms	10ms	max, min, L2 norm for each subband	10.90/6.91 "
-default	--fake	haar	dwt		24	7	no		no		40ms	10ms	max, min, L2 norm for each subband	10.04/6.81
-default	--fake	haar	dwt		24	7	no		no		40ms	15ms	max, min, L2 norm for each subband	9.11/5.31
-default	--fake	haar	dwt		24	7	no		no		40ms	20ms	max, min, L2 norm for each subband	9.49/5.90
-default	--fake	haar	dwt		24	7	no		no		50ms	10ms	max, min, L2 norm for each subband	9.47/6.67
-default	--fake	haar	dwt		24	7	no		no		50ms	15ms	max, min, L2 norm for each subband	9.32/5.82
-default	--fake	haar	dwt		24	7	no		no		50ms	20ms	max, min, L2 norm for each subband	8.75/5.49
-default --fake	haar	dwt		27	8	no		no		50ms	20ms	max, min, L2 norm for each subband	9.21/5.81
+default	--fake	haar	dwt		24	7	no		no		25ms	10ms	max, min, L2 norm subband		10.60/7.11 "
+default	--fake	haar	dwt		24	7	no		no		25ms	10ms	max, min, L2 norm subband		10.90/6.91 "
+default	--fake	haar	dwt		24	7	no		no		40ms	10ms	max, min, L2 norm subband		10.04/6.81
+default	--fake	haar	dwt		24	7	no		no		40ms	15ms	max, min, L2 norm subband		9.11/5.31
+default	--fake	haar	dwt		24	7	no		no		40ms	20ms	max, min, L2 norm subband		9.49/5.90
+default	--fake	haar	dwt		24	7	no		no		50ms	10ms	max, min, L2 norm subband		9.47/6.67
+default	--fake	haar	dwt		24	7	no		no		50ms	15ms	max, min, L2 norm subband		9.32/5.82
+default	--fake	haar	dwt		24	7	no		no		50ms	20ms	max, min, L2 norm subband		8.75/5.49
+default --fake	haar	dwt		27	8	no		no		50ms	20ms	max, min, L2 norm subband		9.21/5.81
 
-default	--fake	db4	dwt		24	7	no		no		40ms	15ms	max, min, L2 norm for each subband	7.13/4.18
-default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm for each subband		6.33/3.74
-default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm for each subband/Dim()	6.15/3.72
-default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max^2, L2 norm for each subband/Dim()	error gmm-init-mono.cc:133		
-default	--fake	db4	dwt		9	7	no		no		40ms	15ms	max, L2 norm for window			
+default	--fake	db4	dwt		24	7	no		no		40ms	15ms	max, min, L2 norm subband		7.13/4.18
+default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm subband			6.33/3.74
+default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm subband/Dim()		6.15/3.72
+default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max^2, L2 norm subband/Dim()		error gmm-init-mono.cc:133		
 
-default --fake	haar	wpt		42	3/0	no		no		25ms	10ms	max, min, L2 norm for each subband	19.93/13.55
-default --fake	haar	wpt		15	3/0	no		no		25ms	10ms	max, L2 norm for window			15.54/10.86
-default --fake	haar	wpt		15	4/1	no		no		25ms	10ms	max, L2 norm for window			12.12/7.82
-default --fake	haar	wpt		15	5/2	no		no		25ms	10ms	max, L2 norm for window			10.35/6.85
-default --fake	haar	wpt		31	6/2	no		no		25ms	10ms	max, L2 norm for window			11.72/7.31
-default --fake	haar	wpt		31	6/2	no		no		50ms	20ms	max, L2 norm for window					
+default --fake	haar	wpt		14	3/0	no		no		25ms	10ms	log10(max), log10(L2 norm subband)	18.11/12.10
+default --fake	haar	wpt		14	3/0	no		no		25ms	10ms	max, log10(L2 norm subband)		17.47/11.48
+default --fake	haar	wpt		14	5/2	no		no		25ms	10ms	max, log10(L2 norm subband)		9.33/6.19
+																		10.63/6.94
+
+default --fake	haar	wpt		14	3/0	no		no		25ms	10ms	high max, L2 norm e/c subband		error gmm-init-mono.cc:133
+default --fake	haar	wpt		14	3/0	no		no		50ms	20ms	high max, L2 norm e/c subband		error gmm-init-mono.cc:133
+default --fake	haar	wpt		14	4/1	no		no		25ms	10ms	high max, L2 norm e/c subband			
+default --fake	haar	wpt		14	5/2	no		no		25ms	10ms	high max, L2 norm e/c subband			
+default --fake	haar	wpt		30	6/2	no		no		25ms	10ms	high max, L2 norm e/c subband			
+		
 
 	
 

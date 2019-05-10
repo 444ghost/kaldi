@@ -11,7 +11,7 @@
 # deficiencies; this has been created as a starting point for a tutorial.
 # We're just using the "adults" data here, not the data from children.
 
-rm -r dwt wpt data exp # 444ghost
+# rm -r dwt wpt data exp # 444ghost
 
 . ./cmd.sh ## You'll want to change cmd.sh to something that will work on your system.
            ## This relates to the queue.
