@@ -112,7 +112,12 @@ int main(int argc, char *argv[]) {
       if (var_stats.Min() <= 0.0){
         for(int i = 0; i < var_stats.Dim(); i++){
 	
-		KALDI_LOG << "var_stats(" << i << ") = " << var_stats(i);	
+		if(var_stats(i) <= 0){
+		
+			var_stats(i) = (var_stats(i-1) + var_stats(i+1)) / 2;
+		}
+		KALDI_LOG << "var_stats(" << i << ") = " << var_stats(i);
+		
 	}
 	//KALDI_ERR << "bad variance";
       }
