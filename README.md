@@ -9,7 +9,7 @@ The conf/wavelet.conf file allows you to change wavelet tranform options.
  - --decomposition-level // decomposition level
  - --num-feats // number of features
  - --transform-type // discrete wavelet transform(dwt) or wavelet packet transform(wpt)
- - --dyadic-zoom // wpt's time-frequency resolution localization factor, can be 0 for no effect
+ - --dyadic-zoom // time-frequency resolution localization factor, can be 0 for no effect
 
 --transform-type option should match -t option of the scripts below.
 

@@ -17,7 +17,6 @@
 // See the Apache 2 License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include "base/kaldi-common.h"
 #include "util/common-utils.h"
 #include "gmm/am-diag-gmm.h"
@@ -112,7 +111,7 @@ int main(int argc, char *argv[]) {
       if (var_stats.Min() <= 0.0){
         for(int i = 0; i < var_stats.Dim(); i++){
 	
-		if(var_stats(i) <= 0){
+		if(var_stats(i) <= 0){ // interpolating average from neighboring variances
 		
 			var_stats(i) = (var_stats(i-1) + var_stats(i+1)) / 2;
 		}

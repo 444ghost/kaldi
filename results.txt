@@ -6,8 +6,7 @@ nj	cmvn	wavelet	transform	feats	J/zoom	dithering	x^2_windowing	window	shift	deta
 default	yes	-	Fourier/DCT	13	-	yes		yes		25ms	10ms	MFCCs					0.9/0.64
 default	yes	-	Fourier/DCT	50	-	yes		yes		25ms	10ms	MFCCs					3.24/2.48
 
-default	--fake	haar	dwt		24	7	no		no		25ms	10ms	max, min, L2 norm subband		10.60/7.11 "
-default	--fake	haar	dwt		24	7	no		no		25ms	10ms	max, min, L2 norm subband		10.90/6.91 "
+default	--fake	haar	dwt		24	7	no		no		25ms	10ms	max, min, L2 norm subband		10.60/7.11
 default	--fake	haar	dwt		24	7	no		no		40ms	10ms	max, min, L2 norm subband		10.04/6.81
 default	--fake	haar	dwt		24	7	no		no		40ms	15ms	max, min, L2 norm subband		9.11/5.31
 default	--fake	haar	dwt		24	7	no		no		40ms	20ms	max, min, L2 norm subband		9.49/5.90
@@ -19,10 +18,11 @@ default --fake	haar	dwt		27	8	no		no		50ms	20ms	max, min, L2 norm subband		9.21/
 default	--fake	db4	dwt		24	7	no		no		40ms	15ms	max, min, L2 norm subband		7.13/4.18
 default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm subband			6.33/3.74
 default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm subband/Dim()		6.15/3.72
+default	--fake	db4	dwt		14	7/1	no		no		40ms	15ms	max, L2 norm subband/Dim()		6.64/4.12
 
 default --fake	haar	wpt		14	5/2	no		no		25ms	10ms	max, 1 low max, L2 norm subband		10.63/6.94
 default --fake	haar	wpt		30	5/2	no		no		40ms	15ms	max, 1 low max, L2 norm subband		10.06/6.55
-default --fake	db4	wpt		30	6/2	no		no		40ms	15ms	max, 1 low max, L2 norm subband		
+default --fake	db4	wpt		30	6/2	no		no		40ms	15ms	max, 1 low max, L2 norm subband		9.41/5.97
 
 
 

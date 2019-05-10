@@ -27,14 +27,15 @@
 
 namespace kaldi {
 
-void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, std::string wavelet_type){
+void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, std::string wavelet_type, int zoom){
 
+	/*
 	if(signal->Dim() < pow(2, J)){
 
 		KALDI_ERR << "444ghost.ERROR in feature-wavelet.cc: too many decomposition levels for current window size(sample size)";
 		return;
 	}
-
+	*/
 	if(wavelet_type == "haar"){
 
 		if(J == 0){
@@ -57,11 +58,14 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 
 		KALDI_LOG << "signal->Dim()/2 = " << signal->Dim()/2;
 
-		output->insert(output->end(), vHigh.Max());
-		output->insert(output->end(), vHigh.Min());
-		output->insert(output->end(), vHigh.Norm(2));
+		if(zoom <= 0){
 
-		DWT(&vLow, --J, output, wavelet_type);
+			output->insert(output->end(), vHigh.Max());
+			output->insert(output->end(), vHigh.Min());
+			output->insert(output->end(), vHigh.Norm(2));
+		}
+
+		DWT(&vLow, --J, output, wavelet_type, --zoom);
 	} else if(wavelet_type == "db4"){
 
 		if(signal->Dim() > 3){
@@ -112,12 +116,16 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 				return;
 			} else{
 
-				output->insert(output->end(), vHigh.Max());
-				//output->insert(output->end(), vHigh.Min());
-				output->insert(output->end(), vHigh.Norm(2)/vLow.Dim());
+				if(zoom <= 0){ // frequency filter 0Hz ~ 20kHz/(2^n)
 
-				DWT(&vLow, --J, output, wavelet_type);
+					output->insert(output->end(), vHigh.Max());
+					//output->insert(output->end(), vHigh.Min());
+					output->insert(output->end(), vHigh.Norm(2)/vLow.Dim());
+				}
+
+				DWT(&vLow, --J, output, wavelet_type, --zoom);
 			}
+			
 		}
 	}
 
@@ -143,12 +151,13 @@ void DWT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, s
 
 void WPT(VectorBase<BaseFloat> *signal, int J, std::vector<BaseFloat> *output, std::string wavelet_type, int zoom){
 
+	/*
 	if(signal->Dim() < 2 * pow(2, J - zoom)){
 
 		KALDI_ERR << "444ghost.ERROR in feature-wavelet.cc: too many decomposition levels for current window size(sample size)";
 		return;
 	}
-	
+	*/
 	Vector<BaseFloat> vSignal(*signal);
 	int length = vSignal.Dim();
 	Vector<BaseFloat> buffer(length);
@@ -374,7 +383,8 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 
 	if(transform_type == "dwt"){
 
-		DWT(&signal, J, &output, wavelet_type);
+		DWT(&signal, J, &output, wavelet_type, opts_.dyadic_zoom);
+		KALDI_LOG << "output.size() = " << output.size();
 		//(*feature)(opts_.num_feats - 1) = signal.Norm(2);
 	} else if(transform_type == "wpt"){
 
