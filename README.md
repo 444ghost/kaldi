@@ -33,13 +33,15 @@ Cubic-root log in PLP for intensity vs perceived loudness [3].
 
 Wavelet features [4].
 
-Kaldi tutorials [5], [6].
+Kaldi tutorials [5], [6], [11], [12].
 
 VM symbolic link on Windows [7].
 
 Neural network tutorials for Kaldi [8].
 
 Daubechies family of wavelets [9], [10].
+
+Weighted finite state transducer [13], [14].
  
 Reference
 ---------
@@ -62,4 +64,14 @@ Reference
 [9] http://bearcave.com/misl/misl_tech/wavelets/matrix/index.html
 
 [10] http://bearcave.com/misl/misl_tech/wavelets/daubechies/index.html
+
+[11] https://towardsdatascience.com/how-to-start-with-kaldi-and-speech-recognition-a9b7670ffff6
+
+[12] https://github.com/YoavRamon/awesome-kaldi
+
+[13] http://jrmeyer.github.io/
+
+[14] https://cs.nyu.edu/~mohri/pub/hbka.pdf
+
+[15] https://www.youtube.com/playlist?list=PLxbPHSSMPBeicXAHVfyFvGfCywRCq39Mp
 

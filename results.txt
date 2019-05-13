@@ -22,6 +22,7 @@ default	--fake	db4	dwt		14	7/1	no		no		40ms	15ms	max, L2 norm subband/Dim()		6.6
 
 default --fake	haar	wpt		14	5/2	no		no		25ms	10ms	max, 1 low max, L2 norm subband		10.63/6.94
 default --fake	haar	wpt		30	5/2	no		no		40ms	15ms	max, 1 low max, L2 norm subband		10.06/6.55
+
 default --fake	db4	wpt		30	6/2	no		no		40ms	15ms	max, 1 low max, L2 norm subband		9.41/5.97
 
 

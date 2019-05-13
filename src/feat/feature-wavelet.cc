@@ -384,7 +384,7 @@ void WaveletComputer::Compute(VectorBase<BaseFloat> *signal_frame,
 	if(transform_type == "dwt"){
 
 		DWT(&signal, J, &output, wavelet_type, opts_.dyadic_zoom);
-		KALDI_LOG << "output.size() = " << output.size();
+		//KALDI_LOG << "output.size() = " << output.size();
 		//(*feature)(opts_.num_feats - 1) = signal.Norm(2);
 	} else if(transform_type == "wpt"){
 
