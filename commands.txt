@@ -24,6 +24,7 @@ some git controls
 
    git pull // update
    git add src
+   git reset src // undo add
    git commit -m "src"
    git config --global user.email "you@example.com"
    git config --global user.name "Your Name"
