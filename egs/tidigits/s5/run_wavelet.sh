@@ -38,20 +38,28 @@ utils/validate_lang.pl data/lang/ # Note; this actually does report errors,
 # want to store wavelet features.
 
 # 444ghost ->
-numArg=$@
-if [ -z "$numArg" ]; then
-	echo "444ghost.ERROR in run_wavelet.sh: Specify transform type directory -t=dwt|wpt (-transform=dwt|wpt)"
-	exit 1
-fi
-
-for i in "$@"; do
-	case $i in
-		-t=*|--transform=*)
-		TRANSFORM="${i#*=}"
-
-		;;
-	esac
-done
+#numArg=$@
+#if [ -z "$numArg" ]; then
+#	echo "444ghost.ERROR in run_wavelet.sh: Specify transform type directory -t=dwt|wpt (-transform=dwt|wpt)"
+#	exit 1
+#fi
+#
+#for i in "$@"; do
+#	case $i in
+#		-t=*|--transform=*)
+#		TRANSFORM="${i#*=}"
+#
+#		;;
+#	esac
+#done
+configfile="/home/sung/kaldi/kaldi/egs/tidigits/s5/conf/wavelet.conf"
+while read line; do
+        if [ $line == "--transform-type=dwt" ]; then
+                TRANSFORM=dwt
+	elif [ $line == "--transform-type=wpt" ]; then
+		TRANSFORM=wpt	
+        fi
+done < $configfile
 echo "444ghost.LOG in run_wavelet.sh: The transform type is ${TRANSFORM}"
 waveletdir=${TRANSFORM}
 for x in test train; do
