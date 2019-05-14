@@ -11,8 +11,6 @@ The conf/wavelet.conf file allows you to change wavelet tranform options.
  - --transform-type // discrete wavelet transform(dwt) or wavelet packet transform(wpt)
  - --dyadic-zoom // time-frequency resolution localization factor, can be 0 for no effect
 
---transform-type option should match -t option of the scripts below.
-
 Kaldi version: 5.5.268 77ac79f70 
 
 Data
