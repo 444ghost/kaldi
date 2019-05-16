@@ -1,7 +1,7 @@
 for x in exp/*/decode*; do [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh; done
 
 
-nj	cmvn	wavelet	transform	feats	J/zoom	dithering	x^2_windowing	window	shift	details:				mono/tri
+nj	cmvn	wavelet	transform	feats	J/zoom	dithering	x^2_windowing	window	shift	details:				mono/tri	
 
 default	yes	-	Fourier/DCT	13	-	yes		yes		25ms	10ms	MFCCs					0.9/0.64
 default	yes	-	Fourier/DCT	50	-	yes		yes		25ms	10ms	MFCCs					3.24/2.48
@@ -25,7 +25,13 @@ default --fake	haar	wpt		30	5/2	no		no		40ms	15ms	max, 1 low max, L2 norm subban
 
 default --fake	db4	wpt		30	6/2	no		no		40ms	15ms	max, 1 low max, L2 norm subband		9.41/5.97
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+nj	cmvn	wavelet	transform	feats	J/zoom	dithering	x^2_windowing	window	shift	details:				mono/tri	
+default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm subband/Dim()		6.15/3.72
 
+training	--splice-width		--num-hidden-layers	--initial-learning-rate		--num-epochs		WER
 
-
-
+nnet2		4			2			0.02				10			2.79
+nnet2		4			2			0.04				20	
+nnet2		2			2			0.04				20			5.67
+		

@@ -28,18 +28,23 @@ if [ $stage -le 1 ]; then
 
     mkdir -p $experiment_dir
 
+    # --splice-width: subdivided frames from 4 to 2
+    # --num-hidden-layers from 3 to 2
+    # --initial-learning-rate from 0.02 to 0.04
+    # --num-epochs from 10 to 20
+
     steps/nnet2/train_simple.sh \
         --stage -10 \
         --num-threads "$num_threads" \
         --feat-type raw \
         --splice-width 4 \
-        --lda_dim 65 \
-        --num-hidden-layers 3 \
+	--lda_dim 65 \
+        --num-hidden-layers 2 \
         --hidden-layer-dim 50 \
         --add-layers-period 5 \
-        --num-epochs 10 \
+        --num-epochs 20 \
         --iters-per-epoch 1 \
-        --initial-learning-rate 0.02 \
+        --initial-learning-rate 0.04 \
         --final-learning-rate 0.004 \
         --minibatch-size "$minibatch_size" \
         data/train \
