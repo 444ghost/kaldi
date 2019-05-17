@@ -40,11 +40,11 @@ if [ $stage -le 1 ]; then
         --splice-width 4 \
 	--lda_dim 65 \
         --num-hidden-layers 2 \
-        --hidden-layer-dim 50 \
+        --hidden-layer-dim 250 \
         --add-layers-period 5 \
         --num-epochs 20 \
-        --iters-per-epoch 1 \
-        --initial-learning-rate 0.04 \
+        --iters-per-epoch 5 \
+        --initial-learning-rate 0.001 \
         --final-learning-rate 0.004 \
         --minibatch-size "$minibatch_size" \
         data/train \

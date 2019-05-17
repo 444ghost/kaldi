@@ -30,8 +30,36 @@ nj	cmvn	wavelet	transform	feats	J/zoom	dithering	x^2_windowing	window	shift	deta
 default	--fake	db4	dwt		16	7	no		no		40ms	15ms	max, L2 norm subband/Dim()		6.15/3.72
 
 training	--splice-width		--num-hidden-layers	--initial-learning-rate		--num-epochs		WER
+		--mini-batch-size	--hidden-layer-dim	--final-learning-rate		--iters-per-epochs
 
-nnet2		4			2			0.02				10			2.79
-nnet2		4			2			0.04				20	
-nnet2		2			2			0.04				20			5.67
-		
+nnet2		4			2			0.02/0.004			10			2.79
+nnet2		4			2			0.02/0.004			20			2.75
+nnet2		4			2			0.015/0.004			20			2.45
+nnet2		4			2			0.01/0.004			20			2.15
+nnet2		4			2			0.01/0.002			20			2.80
+nnet2		4			2			0.0075/0.004			20			2.23
+nnet2		4			2			0.005/0.004			20			2.30
+nnet2		4			2			0.005/0.002			20			2.37
+nnet2		4			2			0.04/0.004			20			5.25
+nnet2		2			2			0.04/0.004			20			5.67
+
+nnet2		4			2			0.01/0.004			20			2.15
+nnet2		6			2			0.01/0.004			20			2.82
+nnet2		2			2			0.01/0.004			20			2.80
+nnet2		4			3			0.01/0.004			20			2.50
+nnet2		4			2			0.01/0.004			20/2			2.46
+nnet2		4			2/25			0.01/0.004			20			3.59
+nnet2		4			2/75			0.01/0.004			20			2.21
+nnet2		4			2/100			0.01/0.004			20			1.97
+nnet2		4			2/200			0.01/0.004			20			1.59
+nnet2		4			2/400			0.01/0.004			20			1.85
+nnet2		4			2/300			0.01/0.004			20			1.54
+nnet2		4			2/250			0.01/0.004			20			1.50
+nnet2		4			2/225			0.01/0.004			20			1.64
+
+nnet2		4			2/250			0.01/0.004			20			1.50
+nnet2		4			3/250			0.01/0.004			20			2.81
+nnet2		4			1/250			0.01/0.004			20			2.15
+nnet2		4/64			2/250			0.01/0.004			20			1.55 nnet2		4/256			2/250			0.01/0.004			20			5.82
+nnet2		4			2/250			0.01/0.004			20/5			1.53
+
