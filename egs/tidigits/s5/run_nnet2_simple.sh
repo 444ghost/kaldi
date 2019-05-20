@@ -32,7 +32,11 @@ if [ $stage -le 1 ]; then
     # --num-hidden-layers from 3 to 2
     # --initial-learning-rate from 0.02 to 0.04
     # --num-epochs from 10 to 20
-
+# 444ghost ->
+#SoftmaxComponent dimensions are larger than the configured initially then grouped up to config value.
+#The number of dimensions correspond to the context-dependent triphone labels.
+#./tools/nnet-am-info exp/nnet2/nnet2_simple/final.mdl
+# 444ghost <-
     steps/nnet2/train_simple.sh \
         --stage -10 \
         --num-threads "$num_threads" \
