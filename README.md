@@ -1,4 +1,4 @@
-(검색용 텍스트: 칼디, 웨이블릿, 음성인식)
+(검색용 텍스트: 칼디, 웨이블릿, 음성인식, 머신러닝, 뉴럴넷)
 
 Wavelet Transform Feature Extraction Module for Kaldi
 ============
@@ -10,6 +10,8 @@ The conf/wavelet.conf file allows you to change wavelet tranform options.
  - --num-feats // number of features
  - --transform-type // discrete wavelet transform(dwt) or wavelet packet transform(wpt)
  - --dyadic-zoom // time-frequency resolution localization factor, can be 0 for no effect
+
+The neural network training seems to give better WERs. Other machine learning trainings may be explored later.
 
 Kaldi version: 5.5.268 77ac79f70 
 
