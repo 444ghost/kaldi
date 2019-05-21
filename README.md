@@ -37,7 +37,7 @@ Kaldi tutorials [5], [6], [11], [12].
 
 VM symbolic link on Windows [7].
 
-Neural network tutorials for Kaldi [8].
+Neural network tutorials for Kaldi [8], [15], [16].
 
 Daubechies family of wavelets [9], [10].
 
@@ -75,3 +75,4 @@ Reference
 
 [15] https://www.youtube.com/playlist?list=PLxbPHSSMPBeicXAHVfyFvGfCywRCq39Mp
 
+[16] https://towardsdatascience.com/recurrent-neural-networks-and-lstm-4b601dd822a5

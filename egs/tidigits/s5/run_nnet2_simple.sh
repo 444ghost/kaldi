@@ -47,7 +47,7 @@ if [ $stage -le 1 ]; then
         --hidden-layer-dim 250 \
         --add-layers-period 5 \
         --num-epochs 20 \
-        --iters-per-epoch 5 \
+        --iters-per-epoch 1 \
         --initial-learning-rate 0.001 \
         --final-learning-rate 0.004 \
         --minibatch-size "$minibatch_size" \
