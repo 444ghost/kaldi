@@ -11,7 +11,7 @@ The conf/wavelet.conf file allows you to change wavelet tranform options.
  - --transform-type // discrete wavelet transform(dwt) or wavelet packet transform(wpt)
  - --dyadic-zoom // time-frequency resolution localization factor, can be 0 for no effect
 
-The neural network training seems to give better WERs. Other machine learning trainings may be explored later.
+The neural network training seems to give better WERs. Other machine learnings may be explored later.
 
 Kaldi version: 5.5.268 77ac79f70 
 
