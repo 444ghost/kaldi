@@ -44,7 +44,7 @@ if [ ! -x $sph2pipe ]; then
 fi
 for x in train test; do
   # get scp file that has utterance-ids and maps to the sphere file.
-  cat $tmpdir/$x.flist | perl -ane 'm|/(..)/([1-9zo]+[ab])\.wav| || die "bad line $_"; print "$1_$2 $_"; ' \
+  cat $tmpdir/$x.flist | perl -ane 'm|/(..)/([1-9zo]+[ab])\.wav| || die "bad line $_"; print "$1-$2 $_"; ' \
    | sort > $tmpdir/${x}_sph.scp
   # turn it into one that has a valid .wav format in the modern sense (i.e. RIFF format, not sphere).
   # This file goes into its final location
@@ -52,10 +52,10 @@ for x in train test; do
   awk '{printf("%s '$sph2pipe' -f wav %s |\n", $1, $2);}' < $tmpdir/${x}_sph.scp > data/$x/wav.scp
   # Now get the "text" file that says what the transcription is.
   cat data/$x/wav.scp | 
-   perl -ane 'm/^(.._([1-9zo]+)[ab]) / || die; $text = join(" ", split("", $2)); print "$1 $text\n";' \
+   perl -ane 'm/^(..-([1-9zo]+)[ab]) / || die; $text = join(" ", split("", $2)); print "$1 $text\n";' \
     <data/$x/wav.scp >data/$x/text
   # now get the "utt2spk" file that says, for each utterance, the speaker name.  
-  perl -ane 'm/^((..)_\S+) / || die; print "$1 $2\n"; ' \
+  perl -ane 'm/^((..)-\S+) / || die; print "$1 $2\n"; ' \
     <data/$x/wav.scp >data/$x/utt2spk
   # create the file that maps from speaker to utterance-list.
   utils/utt2spk_to_spk2utt.pl <data/$x/utt2spk >data/$x/spk2utt
