@@ -9,8 +9,8 @@ set -euo pipefail
 # of usage.
 
 stage=0
-train_set=train_clean_5
-test_sets="dev_clean_2"
+train_set=
+test_sets=
 gmm=tri3b
 
 nnet3_affix=
@@ -24,6 +24,7 @@ ali_dir=exp/${gmm}_ali_${train_set}_sp
 
 echo $train_set
 echo $test_sets
+exit 1
 
 for f in data/${train_set}/feats.scp ${gmm_dir}/final.mdl; do
   if [ ! -f $f ]; then
