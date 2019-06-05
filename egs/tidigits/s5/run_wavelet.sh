@@ -64,8 +64,8 @@ echo "444ghost.LOG in run_wavelet.sh: The transform type is ${TRANSFORM}"
 waveletdir=${TRANSFORM}
 for x in test train; do
 	steps/make_wavelet.sh --cmd "$train_cmd" --nj 20 data/$x exp/make_$waveletdir/$x $waveletdir || exit 1; # 444ghost nj from 20 to 1
-	utils/fix_data_dir.sh data/$x
 	steps/compute_cmvn_stats.sh --fake data/$x exp/make_$waveletdir/$x $waveletdir || exit 1;
+	utils/fix_data_dir.sh data/$x
 done
 # 444ghost <-
 
